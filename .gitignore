@@ -1,0 +1,41 @@
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node
+node_modules/
+apps/web/node_modules/
+apps/web/.angular/
+apps/web/dist/
+apps/web/coverage/
+
+# .NET
+**/bin/
+**/obj/
+
+# Terraform
+**/.terraform/
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Docker
+*.log
+
+# Env / secrets
+.env
+.env.*
+*.local
+*.secret
+*.pem
+
+# Misc
+coverage/
+dist/

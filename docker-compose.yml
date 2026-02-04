@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: perfect-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: perfect_db
+      POSTGRES_USER: perfect
+      POSTGRES_PASSWORD: perfect
+    ports:
+      - "5433:5432"
+    volumes:
+      - perfect_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U perfect -d perfect_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Perfect.Api/Dockerfile
+    container_name: perfect-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__Default: Host=db;Port=5432;Database=perfect_db;Username=perfect;Password=perfect
+      Jwt__Issuer: Perfect.Api
+      Jwt__Audience: Perfect.Client
+      Jwt__Key: PERFECT_DOCKER_DEMO_SECRET_KEY_2026
+      Jwt__AccessTokenMinutes: 60
+      Jwt__RefreshTokenDays: 14
+      Tenant__Mode: mixed
+      Tenant__HeaderName: X-Tenant-Id
+      Tenant__SlugHeaderName: X-Tenant-Slug
+      Cors__AllowedOrigins: http://localhost:4200
+      Platform__BootstrapKey: perfect-bootstrap-dev
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  perfect_pg_data:
