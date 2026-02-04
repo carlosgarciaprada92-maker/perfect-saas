@@ -9,23 +9,22 @@ locals {
 module "network" {
   source      = "../../modules/network"
   name_prefix = var.name_prefix
-  app_port    = 8080
+  app_port    = 80
   tags        = local.common_tags
 }
 
-module "ecr" {
-  source      = "../../modules/ecr"
-  name_prefix = var.name_prefix
-  tags        = local.common_tags
+module "ecr_api" {
+  source          = "../../modules/ecr"
+  name_prefix     = var.name_prefix
+  repository_name = "api"
+  tags            = local.common_tags
 }
 
-module "rds" {
-  source             = "../../modules/rds"
-  name_prefix        = var.name_prefix
-  subnet_ids         = module.network.private_subnet_ids
-  security_group_ids = [module.network.rds_security_group_id]
-  db_password        = var.db_password
-  tags               = local.common_tags
+module "ecr_web" {
+  source          = "../../modules/ecr"
+  name_prefix     = var.name_prefix
+  repository_name = "web"
+  tags            = local.common_tags
 }
 
 module "ecs" {
@@ -34,21 +33,25 @@ module "ecs" {
   region             = var.aws_region
   subnet_ids         = module.network.public_subnet_ids
   security_group_ids = [module.network.ecs_security_group_id]
-  container_image    = "${module.ecr.repository_url}:${var.api_image_tag}"
+  web_image          = "${module.ecr_web.repository_url}:${var.image_tag}"
+  api_image          = "${module.ecr_api.repository_url}:${var.image_tag}"
+  db_password        = var.db_password
   desired_count      = 1
-  cpu                = 256
-  memory             = 512
+  cpu                = 1024
+  memory             = 2048
   assign_public_ip   = true
-  environment = {
+  api_environment = {
     ASPNETCORE_ENVIRONMENT     = "Production"
     ASPNETCORE_URLS            = "http://+:8080"
-    ConnectionStrings__Default = "Host=${module.rds.endpoint};Port=${module.rds.port};Database=${module.rds.db_name};Username=perfect;Password=${var.db_password}"
+    ConnectionStrings__Default = "Host=127.0.0.1;Port=5432;Database=perfectdb;Username=perfect;Password=${var.db_password}"
     Jwt__Issuer                = "Perfect.Api"
     Jwt__Audience              = "Perfect.Client"
-    Jwt__Key                   = "CHANGE_ME_IN_SSM_OR_SECRETS_MANAGER"
+    Jwt__Key                   = var.jwt_key
     Tenant__Mode               = "mixed"
     Tenant__HeaderName         = "X-Tenant-Id"
+    Tenant__SlugHeaderName     = "X-Tenant-Slug"
     Cors__AllowedOrigins       = var.cors_allowed_origins
+    Platform__BootstrapKey     = ""
   }
   tags = local.common_tags
 }

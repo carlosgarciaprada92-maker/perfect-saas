@@ -1,6 +1,6 @@
 variable "aws_region" {
   type    = string
-  default = "us-east-1"
+  default = "us-east-2"
 }
 
 variable "name_prefix" {
@@ -13,12 +13,17 @@ variable "db_password" {
   sensitive = true
 }
 
-variable "api_image_tag" {
+variable "jwt_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "image_tag" {
   type    = string
   default = "latest"
 }
 
 variable "cors_allowed_origins" {
   type    = string
-  default = "http://localhost:4200"
+  default = "*"
 }
