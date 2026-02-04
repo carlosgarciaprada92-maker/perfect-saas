@@ -1,0 +1,102 @@
+:root {
+  --perfect-50: #eff6ff;
+  --perfect-100: #dbeafe;
+  --perfect-200: #bfdbfe;
+  --perfect-300: #93c5fd;
+  --perfect-400: #60a5fa;
+  --perfect-500: #3b82f6;
+  --perfect-600: #2563eb;
+  --perfect-700: #1d4ed8;
+  --perfect-800: #1e40af;
+  --perfect-900: #1e3a8a;
+  --perfect-ink: #0f172a;
+  --perfect-muted: #475569;
+  --perfect-surface: #ffffff;
+  --perfect-border: #e5e7eb;
+
+  --primary: var(--perfect-500);
+  --primary-hover: var(--perfect-600);
+  --primary-active: var(--perfect-700);
+  --focus-ring: rgba(147, 197, 253, 0.45);
+  --perfect-control-h: 40px;
+  --border: var(--perfect-border);
+  --text: var(--perfect-ink);
+  --muted: var(--perfect-muted);
+
+  /* PrimeNG root overrides (force Perfect blue even if theme injects later) */
+  --p-primary-color: var(--perfect-500) !important;
+  --p-primary-contrast-color: var(--perfect-surface) !important;
+  --p-primary-hover-color: var(--perfect-600) !important;
+  --p-primary-active-color: var(--perfect-700) !important;
+
+  --p-success-color: var(--perfect-500) !important;
+  --p-success-contrast-color: var(--perfect-surface) !important;
+  --p-success-hover-color: var(--perfect-600) !important;
+  --p-success-active-color: var(--perfect-700) !important;
+
+  --p-highlight-background: var(--perfect-100) !important;
+  --p-highlight-focus-background: var(--perfect-200) !important;
+  --p-highlight-color: var(--perfect-800) !important;
+  --p-highlight-focus-color: var(--perfect-900) !important;
+
+  --p-focus-ring-shadow: 0 0 0 0.2rem rgba(147, 197, 253, 0.45) !important;
+  --p-form-field-focus-border-color: var(--perfect-500) !important;
+  --p-form-field-hover-border-color: var(--perfect-400) !important;
+  --p-form-field-focus-ring-shadow: 0 0 0 0.2rem rgba(147, 197, 253, 0.35) !important;
+
+  --p-list-option-selected-background: var(--perfect-100) !important;
+  --p-list-option-selected-focus-background: var(--perfect-200) !important;
+  --p-list-option-selected-color: var(--perfect-800) !important;
+  --p-list-option-selected-focus-color: var(--perfect-900) !important;
+  --p-list-option-focus-background: var(--perfect-50) !important;
+  --p-list-option-focus-color: var(--perfect-ink) !important;
+
+  /* Remap green/emerald palettes to Perfect (kills runtime green tokens) */
+  --p-green-50: var(--perfect-50) !important;
+  --p-green-100: var(--perfect-100) !important;
+  --p-green-200: var(--perfect-200) !important;
+  --p-green-300: var(--perfect-300) !important;
+  --p-green-400: var(--perfect-400) !important;
+  --p-green-500: var(--perfect-500) !important;
+  --p-green-600: var(--perfect-600) !important;
+  --p-green-700: var(--perfect-700) !important;
+  --p-green-800: var(--perfect-800) !important;
+  --p-green-900: var(--perfect-900) !important;
+  --p-green-950: var(--perfect-900) !important;
+
+  --p-emerald-50: var(--perfect-50) !important;
+  --p-emerald-100: var(--perfect-100) !important;
+  --p-emerald-200: var(--perfect-200) !important;
+  --p-emerald-300: var(--perfect-300) !important;
+  --p-emerald-400: var(--perfect-400) !important;
+  --p-emerald-500: var(--perfect-500) !important;
+  --p-emerald-600: var(--perfect-600) !important;
+  --p-emerald-700: var(--perfect-700) !important;
+  --p-emerald-800: var(--perfect-800) !important;
+  --p-emerald-900: var(--perfect-900) !important;
+  --p-emerald-950: var(--perfect-900) !important;
+
+  --green-50: var(--perfect-50) !important;
+  --green-100: var(--perfect-100) !important;
+  --green-200: var(--perfect-200) !important;
+  --green-300: var(--perfect-300) !important;
+  --green-400: var(--perfect-400) !important;
+  --green-500: var(--perfect-500) !important;
+  --green-600: var(--perfect-600) !important;
+  --green-700: var(--perfect-700) !important;
+  --green-800: var(--perfect-800) !important;
+  --green-900: var(--perfect-900) !important;
+  --green-950: var(--perfect-900) !important;
+
+  --emerald-50: var(--perfect-50) !important;
+  --emerald-100: var(--perfect-100) !important;
+  --emerald-200: var(--perfect-200) !important;
+  --emerald-300: var(--perfect-300) !important;
+  --emerald-400: var(--perfect-400) !important;
+  --emerald-500: var(--perfect-500) !important;
+  --emerald-600: var(--perfect-600) !important;
+  --emerald-700: var(--perfect-700) !important;
+  --emerald-800: var(--perfect-800) !important;
+  --emerald-900: var(--perfect-900) !important;
+  --emerald-950: var(--perfect-900) !important;
+}

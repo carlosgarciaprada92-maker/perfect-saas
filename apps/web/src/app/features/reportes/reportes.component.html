@@ -1,0 +1,379 @@
+<app-page-header
+  [title]="'reportes.title' | translate"
+  [subtitle]="'reportes.subtitle' | translate"
+></app-page-header>
+
+<div class="filters-toolbar filters-toolbar--reportes card-surface">
+  <div class="filters-header">
+    <div>
+      <h3 class="filters-title">{{ 'reportes.filtrosTitle' | translate }}</h3>
+      <p class="app-muted">{{ 'reportes.filtrosSubtitle' | translate }}</p>
+    </div>
+  </div>
+
+  <div class="perfect-filters-row perfect-filters-row--reportes">
+    <div class="filter-field field-range">
+      <label>{{ 'reportes.rango' | translate }}</label>
+      <p-select
+        [options]="rangeOptions"
+        optionLabel="label"
+        optionValue="value"
+        [(ngModel)]="rangeDays"
+        (onChange)="updateFilters()"
+      ></p-select>
+    </div>
+    <div class="filter-field field-umbral">
+      <label>{{ 'reportes.umbral' | translate }}</label>
+      <p-select
+        [options]="umbralOptions"
+        optionLabel="label"
+        optionValue="value"
+        [(ngModel)]="umbralDias"
+        (onChange)="updateFilters()"
+      ></p-select>
+    </div>
+    <div class="filter-field field-cliente">
+      <label>{{ 'reportes.cliente' | translate }}</label>
+      <p-autoComplete
+        [(ngModel)]="clienteSeleccionado"
+        [suggestions]="clienteSuggestions"
+        (completeMethod)="onSearchClientes($event)"
+        optionLabel="nombre"
+        [dropdown]="true"
+        [forceSelection]="true"
+        (onSelect)="updateFilters()"
+        (onClear)="clearCliente()"
+        [showClear]="true"
+      ></p-autoComplete>
+    </div>
+    <div class="filter-field field-estado">
+      <label>{{ 'reportes.estado' | translate }}</label>
+      <p-select
+        [options]="estadoOptions"
+        optionLabel="label"
+        optionValue="value"
+        [(ngModel)]="estado"
+        (onChange)="updateFilters()"
+      ></p-select>
+    </div>
+    <div class="filter-field field-pagadas">
+      <div class="perfect-checkbox-inline">
+        <p-checkbox
+          [binary]="true"
+          [(ngModel)]="includePagadas"
+          (onChange)="updateFilters()"
+          inputId="includePagadas"
+        ></p-checkbox>
+        <label for="includePagadas">{{ 'reportes.incluirPagadas' | translate }}</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="filters-secondary">
+    <div class="filter-field field-search">
+      <label>{{ 'reportes.buscar' | translate }}</label>
+      <span class="p-input-icon-left w-full">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          class="w-full"
+          [placeholder]="'reportes.buscar' | translate"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="updateFilters()"
+        />
+      </span>
+    </div>
+  </div>
+</div>
+
+<p-tabs [(value)]="activeTab">
+  <p-tablist>
+    <p-tab value="cartera">{{ 'reportes.carteraTab' | translate }}</p-tab>
+    <p-tab value="ventas">{{ 'reportes.ventasTab' | translate }}</p-tab>
+    <p-tab value="clientes">{{ 'reportes.clientesTab' | translate }}</p-tab>
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="cartera">
+      <ng-container *ngIf="cartera$ | async as cartera">
+        <div class="card-surface p-3">
+          <div class="flex align-items-center justify-content-between mb-3">
+            <div>
+              <strong>{{ 'cartera.totalPendiente' | translate }}</strong>
+              <span class="ml-2">
+                {{ cartera.totalPendiente | currency:'COP':'symbol-narrow' }}
+              </span>
+            </div>
+            <button
+              pButton
+              type="button"
+              class="p-button-outlined"
+              (click)="exportCsv(cartera.rows)"
+            >
+              {{ 'reportes.exportar' | translate }}
+            </button>
+          </div>
+
+          <p-table
+            [value]="cartera.rows"
+            [rows]="8"
+            [paginator]="true"
+            responsiveLayout="scroll"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>{{ 'reportes.cliente' | translate }}</th>
+                <th>{{ 'cartera.factura' | translate }}</th>
+                <th>{{ 'cartera.estado' | translate }}</th>
+                <th>{{ 'cartera.vencimiento' | translate }}</th>
+                <th>{{ 'reportes.dias' | translate }}</th>
+                <th>{{ 'cartera.total' | translate }}</th>
+                <th>{{ 'reportes.saldo' | translate }}</th>
+                <th>{{ 'cartera.acciones' | translate }}</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+              <tr [ngClass]="rowClass(row)">
+                <td>{{ row.cliente?.nombre || '-' }}</td>
+                <td>{{ row.factura.consecutivo }}</td>
+                <td>
+                  <p-tag [value]="row.estado"></p-tag>
+                </td>
+                <td>{{ row.factura.fechaVencimiento | date:'shortDate' }}</td>
+                <td>
+                  <span *ngIf="row.estado === 'POR_VENCER'">{{ row.daysToDue }}</span>
+                  <span *ngIf="row.estado === 'VENCIDO'">{{ row.daysOverdue }}</span>
+                  <span *ngIf="row.estado === 'AL_DIA'">-</span>
+                </td>
+                <td>{{ row.factura.total | currency:'COP':'symbol-narrow' }}</td>
+                <td>{{ row.factura.saldoPendiente | currency:'COP':'symbol-narrow' }}</td>
+                <td>
+                  <button
+                    *ngIf="can('ventas:marcarPagada') && row.factura.saldoPendiente > 0"
+                    pButton
+                    type="button"
+                    class="p-button-text"
+                    (click)="openPayment(row)"
+                  >
+                    {{ 'reportes.registrarPago' | translate }}
+                  </button>
+                  <button
+                    *ngIf="can('ventas:marcarPagada') && row.factura.saldoPendiente > 0"
+                    pButton
+                    type="button"
+                    class="p-button-text"
+                    (click)="markAsPaid(row)"
+                  >
+                    {{ 'cartera.marcarPagada' | translate }}
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="8" class="text-center app-muted p-4">
+                  {{ 'cartera.empty' | translate }}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </ng-container>
+    </p-tabpanel>
+
+    <p-tabpanel value="ventas">
+      <ng-container *ngIf="ventas$ | async as ventas">
+        <div class="grid">
+          <div class="col-12 lg:col-4">
+            <div class="card-surface p-3">
+              <h4>{{ 'reportes.resumenVentas' | translate }}</h4>
+              <div class="flex flex-column gap-2 mt-2">
+                <div class="flex justify-content-between">
+                  <span class="app-muted">{{ 'reportes.totalVentas' | translate }}</span>
+                  <strong>{{ ventas.resumen.totalVentas | currency:'COP':'symbol-narrow' }}</strong>
+                </div>
+                <div class="flex justify-content-between">
+                  <span class="app-muted">{{ 'reportes.totalContado' | translate }}</span>
+                  <strong>{{ ventas.resumen.totalContado | currency:'COP':'symbol-narrow' }}</strong>
+                </div>
+                <div class="flex justify-content-between">
+                  <span class="app-muted">{{ 'reportes.totalCredito' | translate }}</span>
+                  <strong>{{ ventas.resumen.totalCredito | currency:'COP':'symbol-narrow' }}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 lg:col-8">
+            <div class="card-surface p-3">
+              <h4>{{ 'reportes.ventasPorDia' | translate }}</h4>
+              <p-table
+                [value]="ventas.porDia"
+                [rows]="7"
+                [paginator]="true"
+                responsiveLayout="scroll"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>{{ 'reportes.fecha' | translate }}</th>
+                    <th>{{ 'reportes.total' | translate }}</th>
+                    <th>{{ 'reportes.cantidad' | translate }}</th>
+                    <th>{{ 'reportes.credito' | translate }}</th>
+                    <th>{{ 'reportes.contado' | translate }}</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                  <tr>
+                    <td>{{ row.date }}</td>
+                    <td>{{ row.total | currency:'COP':'symbol-narrow' }}</td>
+                    <td>{{ row.count }}</td>
+                    <td>{{ row.creditoTotal | currency:'COP':'symbol-narrow' }}</td>
+                    <td>{{ row.contadoTotal | currency:'COP':'symbol-narrow' }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="5" class="text-center app-muted p-4">
+                      {{ 'reportes.sinDatos' | translate }}
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-surface p-3 mt-3">
+          <h4>{{ 'reportes.ventasPorTipo' | translate }}</h4>
+          <p-table [value]="ventas.porTipo" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>{{ 'reportes.tipoPago' | translate }}</th>
+                <th>{{ 'reportes.total' | translate }}</th>
+                <th>{{ 'reportes.cantidad' | translate }}</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+              <tr>
+                <td>{{ row.tipo }}</td>
+                <td>{{ row.total | currency:'COP':'symbol-narrow' }}</td>
+                <td>{{ row.count }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="3" class="text-center app-muted p-4">
+                  {{ 'reportes.sinDatos' | translate }}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </ng-container>
+    </p-tabpanel>
+
+    <p-tabpanel value="clientes">
+      <div class="grid">
+        <div class="col-12 lg:col-7">
+          <div class="card-surface p-3">
+            <h4>{{ 'reportes.topClientes' | translate }}</h4>
+            <p-table
+              [value]="(clientes$ | async)?.topClientes ?? []"
+              [rows]="6"
+              [paginator]="true"
+              responsiveLayout="scroll"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>{{ 'reportes.cliente' | translate }}</th>
+                  <th>{{ 'reportes.total' | translate }}</th>
+                  <th>{{ 'reportes.compras' | translate }}</th>
+                  <th>{{ 'reportes.ticketProm' | translate }}</th>
+                  <th>{{ 'reportes.creditoPct' | translate }}</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td>{{ row.cliente.nombre }}</td>
+                  <td>{{ row.total | currency:'COP':'symbol-narrow' }}</td>
+                  <td>{{ row.count }}</td>
+                  <td>{{ row.promedio | currency:'COP':'symbol-narrow' }}</td>
+                  <td>{{ row.creditoPct | number: '1.0-0' }}%</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="5" class="text-center app-muted p-4">
+                    {{ 'reportes.sinDatos' | translate }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+        <div class="col-12 lg:col-5">
+          <div class="card-surface p-3">
+            <h4>{{ 'reportes.inactivos' | translate }}</h4>
+            <p-table
+              [value]="(clientes$ | async)?.inactivos ?? []"
+              [rows]="6"
+              [paginator]="true"
+              responsiveLayout="scroll"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>{{ 'reportes.cliente' | translate }}</th>
+                  <th>{{ 'reportes.ultimaCompra' | translate }}</th>
+                  <th>{{ 'reportes.dias' | translate }}</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td>{{ row.cliente.nombre }}</td>
+                  <td>{{ row.lastPurchase | date: 'shortDate' }}</td>
+                  <td>{{ row.daysInactive }}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="3" class="text-center app-muted p-4">
+                    {{ 'reportes.sinDatos' | translate }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </div>
+    </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>
+
+<p-dialog
+  [(visible)]="paymentVisible"
+  [modal]="true"
+  [style]="{ width: '420px' }"
+  [header]="'reportes.registrarPago' | translate"
+>
+  <div *ngIf="paymentFactura" class="flex flex-column gap-3">
+    <div>
+      <strong>{{ paymentFactura.factura.consecutivo }}</strong>
+      <p class="app-muted">{{ paymentFactura.cliente?.nombre || '-' }}</p>
+    </div>
+    <div class="flex flex-column gap-2">
+      <label>{{ 'reportes.montoPago' | translate }}</label>
+      <p-inputNumber [(ngModel)]="paymentAmount" [min]="1"></p-inputNumber>
+    </div>
+    <div class="flex justify-content-between">
+      <span class="app-muted">{{ 'reportes.saldoActual' | translate }}</span>
+      <strong>{{ paymentFactura.factura.saldoPendiente | currency:'COP':'symbol-narrow' }}</strong>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton type="button" class="p-button-text" (click)="paymentVisible = false">
+      {{ 'app.cancelar' | translate }}
+    </button>
+    <button pButton type="button" (click)="confirmPayment()">
+      {{ 'app.guardar' | translate }}
+    </button>
+  </ng-template>
+</p-dialog>

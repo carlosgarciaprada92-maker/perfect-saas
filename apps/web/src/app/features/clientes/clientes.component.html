@@ -1,0 +1,91 @@
+<app-page-header
+  [title]="'clientes.title' | translate"
+  [subtitle]="'clientes.subtitle' | translate"
+>
+  <button *ngIf="can('clientes:create')" pButton type="button" icon="pi pi-plus" (click)="openNew()">
+    {{ 'clientes.nuevo' | translate }}
+  </button>
+</app-page-header>
+
+<div class="card-surface p-3">
+  <p-table [value]="(clientes$ | async) ?? []" [rows]="8" [paginator]="true" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>{{ 'clientes.nombre' | translate }}</th>
+        <th>{{ 'clientes.identificacion' | translate }}</th>
+        <th>{{ 'clientes.telefono' | translate }}</th>
+        <th>{{ 'clientes.plazo' | translate }}</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-cliente>
+      <tr>
+        <td>{{ cliente.nombre }}</td>
+        <td>{{ cliente.identificacion || '—' }}</td>
+        <td>{{ cliente.telefono || '—' }}</td>
+        <td>{{ cliente.plazoCreditoDias }} {{ 'clientes.dias' | translate }}</td>
+        <td>
+          <button
+            *ngIf="can('clientes:edit')"
+            pButton
+            type="button"
+            class="p-button-text"
+            icon="pi pi-pencil"
+            (click)="openEdit(cliente)"
+          ></button>
+          <button
+            *ngIf="can('clientes:delete')"
+            pButton
+            type="button"
+            class="p-button-text p-button-danger"
+            icon="pi pi-trash"
+            (click)="delete(cliente)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="text-center app-muted p-4">{{ 'clientes.empty' | translate }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '480px' }" [header]="isEdit ? ('clientes.editar' | translate) : ('clientes.nuevo' | translate)">
+  <form [formGroup]="form" class="flex flex-column gap-3">
+    <div class="flex flex-column gap-2">
+      <label>{{ 'clientes.nombre' | translate }}</label>
+      <input pInputText formControlName="nombre" />
+    </div>
+    <div class="flex flex-column gap-2">
+      <label>{{ 'clientes.identificacion' | translate }}</label>
+      <input pInputText formControlName="identificacion" />
+    </div>
+    <div class="flex flex-column gap-2">
+      <label>{{ 'clientes.telefono' | translate }}</label>
+      <input pInputText formControlName="telefono" />
+    </div>
+    <div class="flex flex-column gap-2">
+      <label>{{ 'clientes.email' | translate }}</label>
+      <input pInputText formControlName="email" />
+    </div>
+    <div class="flex flex-column gap-2">
+      <label>{{ 'clientes.plazo' | translate }}</label>
+      <p-select
+        [options]="plazos"
+        optionLabel="label"
+        optionValue="value"
+        formControlName="plazoCreditoDias"
+      ></p-select>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <button pButton type="button" class="p-button-text" (click)="visible = false">
+      {{ 'app.cancelar' | translate }}
+    </button>
+    <button pButton type="button" (click)="save()">
+      {{ 'app.guardar' | translate }}
+    </button>
+  </ng-template>
+</p-dialog>

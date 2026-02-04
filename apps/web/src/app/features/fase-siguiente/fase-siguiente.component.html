@@ -1,0 +1,14 @@
+<app-page-header
+  [title]="'fase.title' | translate"
+  [subtitle]="'fase.subtitle' | translate"
+></app-page-header>
+
+<div class="grid">
+  <div class="col-12 md:col-6 lg:col-4" *ngFor="let item of items">
+    <div class="card-surface p-4">
+      <div class="pill mb-2">{{ 'fase.proximamente' | translate }}</div>
+      <h3>{{ item | translate }}</h3>
+      <p class="app-muted">{{ 'fase.descripcion' | translate }}</p>
+    </div>
+  </div>
+</div>

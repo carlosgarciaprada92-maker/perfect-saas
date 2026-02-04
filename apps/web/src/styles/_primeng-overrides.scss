@@ -1,0 +1,283 @@
+.p-button:not(.p-button-text):not(.p-button-outlined),
+.p-button.p-button-success,
+.p-button.p-button-info {
+  background: var(--perfect-500) !important;
+  border-color: var(--perfect-500) !important;
+  color: var(--perfect-surface) !important;
+}
+
+.p-button:not(.p-button-text):not(.p-button-outlined):hover,
+.p-button.p-button-success:hover,
+.p-button.p-button-info:hover {
+  background: var(--perfect-600) !important;
+  border-color: var(--perfect-600) !important;
+}
+
+.p-button:not(.p-button-text):not(.p-button-outlined):active,
+.p-button.p-button-success:active,
+.p-button.p-button-info:active {
+  background: var(--perfect-700) !important;
+  border-color: var(--perfect-700) !important;
+}
+
+.p-button:focus,
+.p-button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.35) !important;
+}
+
+.p-button.p-button-outlined,
+.p-button.p-button-outlined.p-button-success {
+  color: var(--perfect-600) !important;
+  border-color: var(--perfect-300) !important;
+  background: transparent;
+}
+
+.p-button.p-button-outlined:hover,
+.p-button.p-button-outlined.p-button-success:hover {
+  background: var(--perfect-50) !important;
+  border-color: var(--perfect-400) !important;
+}
+
+.p-button.p-button-text {
+  color: var(--perfect-600) !important;
+}
+
+.p-button.p-button-text:hover {
+  background: var(--perfect-50) !important;
+}
+
+.p-inputtext:focus,
+.p-inputtext:focus-visible,
+.p-select:focus,
+.p-select:focus-visible,
+.p-dropdown:focus,
+.p-dropdown:focus-visible,
+.p-focus {
+  box-shadow: 0 0 0 0.2rem var(--focus-ring) !important;
+  border-color: var(--perfect-500) !important;
+}
+
+.p-checkbox .p-checkbox-box {
+  border-color: var(--perfect-300) !important;
+}
+
+.p-checkbox .p-checkbox-box.p-highlight {
+  background: var(--perfect-500) !important;
+  border-color: var(--perfect-500) !important;
+}
+
+.p-checkbox .p-checkbox-box:focus,
+.p-checkbox .p-checkbox-box:focus-visible {
+  box-shadow: 0 0 0 0.2rem var(--focus-ring) !important;
+  border-color: var(--perfect-500) !important;
+}
+
+.p-radiobutton .p-radiobutton-box {
+  border-color: var(--perfect-300) !important;
+}
+
+.p-radiobutton .p-radiobutton-box.p-highlight {
+  border-color: var(--perfect-500) !important;
+  background: var(--perfect-500) !important;
+}
+
+.p-togglebutton.p-highlight {
+  background: var(--perfect-500) !important;
+  border-color: var(--perfect-500) !important;
+}
+
+.p-tag,
+.p-tag.p-tag-success,
+.p-tag.p-tag-info {
+  background: var(--perfect-100) !important;
+  color: var(--perfect-700) !important;
+  border: 1px solid var(--perfect-200);
+}
+
+.p-badge,
+.p-badge.p-badge-success,
+.p-badge.p-badge-info {
+  background: var(--perfect-500) !important;
+  color: var(--perfect-surface) !important;
+}
+
+.p-chip {
+  background: var(--perfect-100) !important;
+  color: var(--perfect-700) !important;
+}
+
+.p-toast .p-toast-message-success,
+.p-toast .p-toast-message-info {
+  border-left-color: var(--perfect-500) !important;
+  background: var(--perfect-50) !important;
+  color: var(--perfect-ink) !important;
+}
+
+.p-progressbar .p-progressbar-value {
+  background: var(--perfect-500) !important;
+}
+
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  color: var(--perfect-600) !important;
+  border-color: var(--perfect-600) !important;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight,
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:hover {
+  background: var(--perfect-100) !important;
+  color: var(--perfect-ink) !important;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight .p-dropdown-item-label {
+  color: var(--perfect-ink) !important;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:focus {
+  background: var(--perfect-50) !important;
+}
+
+.p-overlaypanel,
+.p-dropdown-panel {
+  background: var(--perfect-surface) !important;
+}
+
+.p-button .pi,
+.p-tag .pi,
+.p-badge .pi,
+.p-chip .pi {
+  color: currentColor;
+}
+
+/* Perfect filter row alignment */
+.perfect-filters-row .p-select,
+.perfect-filters-row .p-dropdown,
+.perfect-filters-row .p-autocomplete,
+.perfect-filters-row .p-inputtext {
+  height: var(--perfect-control-h);
+  font-size: 0.85rem;
+}
+
+.perfect-filters-row .p-select-label,
+.perfect-filters-row .p-dropdown-label {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  font-size: 0.85rem;
+}
+
+.perfect-filters-row .p-autocomplete {
+  width: 100%;
+}
+
+.perfect-filters-row .p-autocomplete .p-inputtext {
+  height: var(--perfect-control-h);
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 0.6rem;
+  line-height: var(--perfect-control-h);
+}
+
+.perfect-filters-row .p-inputtext {
+  padding: 0 0.6rem;
+  line-height: var(--perfect-control-h);
+}
+
+.perfect-filters-row .p-input-icon-left > i {
+  margin-top: 0;
+}
+
+.perfect-filters-row .p-checkbox {
+  margin: 0;
+}
+
+.perfect-filters-row .p-button {
+  height: var(--perfect-control-h);
+  padding: 0 0.9rem;
+  font-size: 0.85rem;
+}
+
+/* Perfect Light tables */
+.p-datatable {
+  background: var(--perfect-surface) !important;
+  color: var(--perfect-ink) !important;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--perfect-border) !important;
+}
+
+.p-datatable .p-datatable-header {
+  background: var(--perfect-50) !important;
+  border-bottom: 1px solid var(--perfect-border) !important;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  background: var(--perfect-50) !important;
+  color: var(--perfect-ink) !important;
+  border-color: var(--perfect-border) !important;
+  font-weight: 600;
+  padding: 0.85rem 1rem;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  border-color: var(--perfect-border) !important;
+  color: var(--perfect-ink) !important;
+  background: var(--perfect-surface) !important;
+  padding: 0.85rem 1rem;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  background: var(--perfect-50) !important;
+}
+
+.p-datatable .p-datatable-tbody > tr.p-highlight {
+  background: var(--perfect-100) !important;
+  color: var(--perfect-ink) !important;
+}
+
+.p-datatable .p-datatable-tbody > tr.row-overdue,
+.p-datatable .p-datatable-tbody > tr.row-overdue > td {
+  background: var(--perfect-100) !important;
+}
+
+.p-datatable .p-datatable-tbody > tr.row-soon,
+.p-datatable .p-datatable-tbody > tr.row-soon > td {
+  background: var(--perfect-50) !important;
+}
+
+.p-datatable .p-sortable-column.p-highlight {
+  color: var(--perfect-600) !important;
+}
+
+.p-datatable .p-sortable-column .p-sortable-column-icon {
+  color: var(--perfect-500) !important;
+}
+
+.p-paginator {
+  border-top: 1px solid var(--perfect-border) !important;
+  background: var(--perfect-surface) !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: var(--perfect-500) !important;
+  border-color: var(--perfect-500) !important;
+  color: var(--perfect-surface) !important;
+}
+
+.p-paginator .p-paginator-page,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-prev {
+  color: var(--perfect-600) !important;
+}
+
+.p-paginator .p-paginator-page:hover,
+.p-paginator .p-paginator-next:hover,
+.p-paginator .p-paginator-prev:hover {
+  background: var(--perfect-50) !important;
+}
+
+.p-dropdown-panel,
+.p-overlaypanel {
+  border-color: var(--perfect-border) !important;
+}

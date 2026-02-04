@@ -1,0 +1,108 @@
+<app-page-header
+  [title]="'productos.title' | translate"
+  [subtitle]="'productos.subtitle' | translate"
+>
+  <button
+    *ngIf="can('productos:create')"
+    pButton
+    type="button"
+    icon="pi pi-plus"
+    [routerLink]="'/app/productos/nuevo'"
+  >
+    {{ 'productos.nuevo' | translate }}
+  </button>
+</app-page-header>
+
+<div class="card-surface p-3" *ngIf="(loading$ | async) === false; else loadingState">
+  <div class="table-toolbar mb-3">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input
+        pInputText
+        type="text"
+        placeholder="{{ 'productos.buscar' | translate }}"
+        [formControl]="searchControl"
+      />
+    </span>
+  </div>
+
+  <p-table
+    [value]="(filtered$ | async) ?? []"
+    [paginator]="true"
+    [rows]="8"
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>{{ 'productos.nombre' | translate }}</th>
+        <th>{{ 'productos.precio' | translate }}</th>
+        <th>{{ 'productos.stock' | translate }}</th>
+        <th>{{ 'productos.estado' | translate }}</th>
+        <th>{{ 'productos.acciones' | translate }}</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-producto>
+      <tr>
+        <td>
+          <div class="flex flex-column">
+            <strong>{{ producto.nombre }}</strong>
+            <small class="app-muted">{{ producto.sku || '—' }}</small>
+          </div>
+          <div class="mt-2" *ngIf="config$ | async as config">
+            <span *ngIf="isNuevo(producto.createdAt, config.diasNuevoProducto)" class="pill">
+              {{ 'productos.nuevoBadge' | translate }}
+            </span>
+          </div>
+        </td>
+        <td>{{ producto.precioBase | currency:'COP':'symbol-narrow' }}</td>
+        <td>
+          <p-tag
+            [value]="producto.stockActual"
+            [severity]="producto.stockActual <= producto.stockMinimo ? 'danger' : 'info'"
+          ></p-tag>
+          <small class="app-muted ml-2">min {{ producto.stockMinimo }}</small>
+          <div class="mt-2" *ngIf="producto.stockActual <= producto.stockMinimo">
+            <p-tag severity="danger" [value]="'productos.bajoStock' | translate"></p-tag>
+          </div>
+        </td>
+        <td>
+          <p-tag [value]="producto.activo ? 'Activo' : 'Inactivo'" [severity]="producto.activo ? 'info' : 'warn'"></p-tag>
+        </td>
+        <td>
+          <button
+            *ngIf="can('productos:edit')"
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            class="p-button-text"
+            (click)="goToEdit(producto.id)"
+          ></button>
+          <button
+            *ngIf="can('productos:delete')"
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            class="p-button-text p-button-danger"
+            (click)="deleteProducto(producto.id)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="text-center app-muted p-4">
+          {{ 'productos.empty' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<ng-template #loadingState>
+  <div class="card-surface p-4">
+    <p-skeleton width="60%" height="2rem" styleClass="mb-3"></p-skeleton>
+    <p-skeleton width="100%" height="1.5rem" styleClass="mb-2"></p-skeleton>
+    <p-skeleton width="100%" height="1.5rem" styleClass="mb-2"></p-skeleton>
+    <p-skeleton width="100%" height="1.5rem"></p-skeleton>
+  </div>
+</ng-template>

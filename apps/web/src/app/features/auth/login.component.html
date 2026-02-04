@@ -1,0 +1,126 @@
+<div class="login-wrapper">
+  <div class="login-grid">
+    <section class="login-brand">
+      <div class="logo-pill">
+        <div class="logo-mark">P</div>
+        <div>
+          <h1>Perfect</h1>
+          <span class="pill">{{ 'auth.mvp' | translate }}</span>
+        </div>
+      </div>
+      <h2>{{ 'auth.claim' | translate }}</h2>
+      <p class="app-muted">{{ 'auth.subtitle' | translate }}</p>
+      <ul class="value-list">
+        <li>{{ 'auth.valueInventario' | translate }}</li>
+        <li>{{ 'auth.valueVentas' | translate }}</li>
+        <li>{{ 'auth.valueCartera' | translate }}</li>
+      </ul>
+      <div class="brand-art">
+        <svg viewBox="0 0 360 220" aria-hidden="true">
+          <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#BFDBFE" />
+              <stop offset="100%" stop-color="#60A5FA" />
+            </linearGradient>
+          </defs>
+          <circle cx="70" cy="60" r="40" fill="url(#grad)" opacity="0.7" />
+          <circle cx="220" cy="70" r="56" fill="#93C5FD" opacity="0.5" />
+          <rect x="40" y="120" width="280" height="70" rx="24" fill="#EFF6FF" />
+          <path d="M70 150h220" stroke="#BFDBFE" stroke-width="8" stroke-linecap="round" />
+          <path d="M110 170h140" stroke="#60A5FA" stroke-width="8" stroke-linecap="round" />
+        </svg>
+      </div>
+    </section>
+
+    <section class="login-form">
+      <p-card class="login-card">
+        <ng-template pTemplate="header">
+          <div class="login-header">
+            <h3>{{ 'auth.title' | translate }}</h3>
+            <p class="app-muted">{{ 'auth.helper' | translate }}</p>
+          </div>
+        </ng-template>
+
+        <form [formGroup]="form" class="flex flex-column gap-3" (ngSubmit)="submit()">
+          <div class="flex flex-column gap-2">
+            <label for="email">{{ 'auth.email' | translate }}</label>
+            <span class="p-input-icon-left">
+              <i class="pi pi-envelope"></i>
+              <input
+                pInputText
+                id="email"
+                formControlName="email"
+                placeholder="admin@perfect.demo"
+                type="email"
+              />
+            </span>
+            <small class="p-error" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+              {{ 'auth.emailError' | translate }}
+            </small>
+          </div>
+
+          <div class="flex align-items-center justify-content-between">
+            <div class="flex align-items-center gap-2">
+              <p-checkbox formControlName="remember" [binary]="true" inputId="remember"></p-checkbox>
+              <label for="remember">{{ 'auth.remember' | translate }}</label>
+            </div>
+            <p-tag [value]="selectedRoleLabel" severity="info"></p-tag>
+          </div>
+
+          <button pButton type="submit" class="w-full" [disabled]="form.invalid">
+            {{ 'auth.continuar' | translate }}
+          </button>
+        </form>
+
+        <p-divider></p-divider>
+
+        <div class="demo-section">
+          <div class="flex align-items-center justify-content-between">
+            <h4>{{ 'auth.demoTitle' | translate }}</h4>
+            <p-tag severity="info" [value]="'auth.demoTag' | translate"></p-tag>
+          </div>
+          <p class="app-muted">{{ 'auth.demoHint' | translate }}</p>
+
+          <div class="demo-grid">
+            <button
+              pButton
+              type="button"
+              class="p-button-outlined demo-btn"
+              (click)="quickLogin('admin@perfect.demo')"
+            >
+              {{ 'auth.demoAdmin' | translate }}
+            </button>
+            <button
+              pButton
+              type="button"
+              class="p-button-outlined demo-btn"
+              (click)="quickLogin('ventas@perfect.demo')"
+            >
+              {{ 'auth.demoVentas' | translate }}
+            </button>
+            <button
+              pButton
+              type="button"
+              class="p-button-outlined demo-btn"
+              (click)="quickLogin('bodega@perfect.demo')"
+            >
+              {{ 'auth.demoBodega' | translate }}
+            </button>
+          </div>
+
+          <div class="mt-3">
+            <label>{{ 'auth.selectAccount' | translate }}</label>
+            <p-select
+              [options]="demoAccounts"
+              optionLabel="label"
+              optionValue="value"
+              [ngModel]="selectedAccount"
+              (onChange)="selectAccount($event.value)"
+              styleClass="w-full"
+            ></p-select>
+          </div>
+        </div>
+      </p-card>
+    </section>
+  </div>
+</div>

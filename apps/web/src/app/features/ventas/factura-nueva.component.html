@@ -1,0 +1,118 @@
+<app-page-header
+  [title]="'ventas.nuevaTitle' | translate"
+  [subtitle]="'ventas.nuevaSubtitle' | translate"
+></app-page-header>
+
+<div class="grid">
+  <div class="col-12 lg:col-5">
+    <div class="card-surface p-4">
+      <h3>{{ 'ventas.productos' | translate }}</h3>
+      <div class="flex flex-column gap-3 mt-3">
+        <p-autoComplete
+          [(ngModel)]="selectedProducto"
+          [suggestions]="suggestions"
+          (completeMethod)="searchProductos($event)"
+          optionLabel="nombre"
+          [dropdown]="true"
+          [forceSelection]="true"
+          placeholder="{{ 'ventas.buscarProducto' | translate }}"
+        ></p-autoComplete>
+        <button pButton type="button" icon="pi pi-plus" (click)="addProducto()">
+          {{ 'ventas.agregar' | translate }}
+        </button>
+      </div>
+
+      <div class="mt-4">
+        <h4>{{ 'ventas.condiciones' | translate }}</h4>
+        <form [formGroup]="form" class="flex flex-column gap-3 mt-2">
+          <p-select
+            [options]="[
+              { label: 'Contado', value: 'CONTADO' },
+              { label: 'Credito', value: 'CREDITO' }
+            ]"
+            optionLabel="label"
+            optionValue="value"
+            formControlName="tipoPago"
+          ></p-select>
+          <p-select
+            *ngIf="form.value.tipoPago === 'CREDITO'"
+            [options]="(clientes$ | async) ?? []"
+            optionLabel="nombre"
+            optionValue="id"
+            formControlName="clienteId"
+            placeholder="{{ 'ventas.seleccionarCliente' | translate }}"
+          ></p-select>
+          <div *ngIf="form.value.tipoPago === 'CREDITO'" class="flex flex-column gap-2">
+            <label>{{ 'ventas.plazo' | translate }}</label>
+            <p-select
+              [options]="plazoOptions"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="plazoSeleccion"
+            ></p-select>
+          </div>
+          <div *ngIf="form.value.tipoPago === 'CREDITO' && isPlazoOtro" class="flex flex-column gap-2">
+            <label>{{ 'ventas.plazoOtro' | translate }}</label>
+            <p-inputNumber formControlName="plazoOtro" [min]="1"></p-inputNumber>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 lg:col-7">
+    <div class="card-surface p-4">
+      <h3>{{ 'ventas.items' | translate }}</h3>
+      <p-table [value]="items" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ 'ventas.producto' | translate }}</th>
+            <th>{{ 'ventas.cantidad' | translate }}</th>
+            <th>{{ 'ventas.precio' | translate }}</th>
+            <th>{{ 'ventas.total' | translate }}</th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td>{{ item.nombreProducto }}</td>
+            <td>
+              <p-inputNumber [(ngModel)]="item.cantidad" [min]="1" (onInput)="updateLine(item)"></p-inputNumber>
+            </td>
+            <td>
+              <p-inputNumber
+                [(ngModel)]="item.precioUnitario"
+                [disabled]="!canEditPrice"
+                mode="currency"
+                currency="COP"
+                locale="es-CO"
+                (onInput)="updateLine(item)"
+              ></p-inputNumber>
+            </td>
+            <td>{{ item.totalLinea | currency:'COP':'symbol-narrow' }}</td>
+            <td>
+              <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-danger" (click)="removeItem(item)"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5" class="text-center app-muted p-4">
+              {{ 'ventas.sinItems' | translate }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <div class="flex justify-content-between mt-3">
+        <strong>{{ 'ventas.subtotal' | translate }}</strong>
+        <strong>{{ subtotal | currency:'COP':'symbol-narrow' }}</strong>
+      </div>
+      <div class="flex justify-content-end mt-3">
+        <button pButton type="button" (click)="guardar()">
+          {{ 'ventas.generar' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

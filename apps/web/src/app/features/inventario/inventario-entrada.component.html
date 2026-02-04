@@ -1,0 +1,67 @@
+<app-page-header
+  [title]="'inventario.title' | translate"
+  [subtitle]="'inventario.subtitle' | translate"
+></app-page-header>
+
+<div class="grid">
+  <div class="col-12 lg:col-5">
+    <div class="card-surface p-4">
+      <h3>{{ 'inventario.formTitle' | translate }}</h3>
+      <form [formGroup]="form" class="flex flex-column gap-3 mt-3">
+        <div class="flex flex-column gap-2">
+          <label>{{ 'inventario.producto' | translate }}</label>
+          <p-autoComplete
+            formControlName="producto"
+            [suggestions]="suggestions"
+            (completeMethod)="searchProductos($event)"
+            optionLabel="nombre"
+            [dropdown]="true"
+            [forceSelection]="true"
+          ></p-autoComplete>
+        </div>
+        <div class="flex flex-column gap-2">
+          <label>{{ 'inventario.cantidad' | translate }}</label>
+          <p-inputNumber formControlName="cantidad" [min]="1"></p-inputNumber>
+        </div>
+        <div class="flex flex-column gap-2">
+          <label>{{ 'inventario.motivo' | translate }}</label>
+          <input pInputText formControlName="motivo" />
+        </div>
+        <button pButton type="button" (click)="registrarEntrada()" [disabled]="!can('inventario:entrada')">
+          {{ 'inventario.registrar' | translate }}
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-12 lg:col-7">
+    <div class="card-surface p-4">
+      <h3>{{ 'inventario.historial' | translate }}</h3>
+      <p-table [value]="(movimientos$ | async) ?? []" [rows]="6" [paginator]="true" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ 'inventario.fecha' | translate }}</th>
+            <th>{{ 'inventario.producto' | translate }}</th>
+            <th>{{ 'inventario.cantidad' | translate }}</th>
+            <th>{{ 'inventario.motivo' | translate }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-mov>
+          <tr>
+            <td>{{ mov.createdAt | date: 'short' }}</td>
+            <td>{{ getProductoNombre(mov.productoId) }}</td>
+            <td>{{ mov.cantidad }}</td>
+            <td>{{ mov.motivo || '—' }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="text-center app-muted p-4">
+              {{ 'inventario.sinMovimientos' | translate }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

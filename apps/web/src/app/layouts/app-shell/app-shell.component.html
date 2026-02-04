@@ -1,0 +1,92 @@
+<div class="layout-shell" [ngClass]="{ collapsed: collapsed() }">
+  <div class="sidebar-backdrop" *ngIf="sidebarOpen()" (click)="closeMobile()"></div>
+  <aside class="sidebar" [ngClass]="{ open: sidebarOpen() }">
+    <div class="logo">
+      <div class="logo-brand">
+        <span class="pi pi-box"></span>
+        <span *ngIf="!collapsed()">Perfect</span>
+      </div>
+      <button
+        *ngIf="isMobile()"
+        pButton
+        type="button"
+        icon="pi pi-times"
+        class="p-button-text sidebar-close"
+        (click)="closeMobile()"
+        aria-label="Cerrar menu"
+        title="Cerrar"
+      ></button>
+    </div>
+
+    <div class="mt-4">
+      <a
+        *ngFor="let item of filteredNav()"
+        class="nav-link"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        (click)="closeMobile()"
+      >
+        <span [class]="item.icon"></span>
+        <span *ngIf="!collapsed()">{{ item.labelKey | translate }}</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="content-area">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button
+          pButton
+          type="button"
+          icon="pi pi-bars"
+          class="p-button-text topbar-toggle"
+          (click)="toggleSidebar()"
+          aria-label="Alternar menu"
+          title="Menu"
+        ></button>
+        <div class="topbar-search">
+          <span class="pi pi-search"></span>
+          <input
+            pInputText
+            type="text"
+            [placeholder]="'app.search' | translate"
+            [(ngModel)]="searchTerm"
+          />
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="topbar-locale">
+          <span class="app-muted">{{ 'app.language' | translate }}</span>
+          <p-select
+            [options]="idiomas"
+            optionLabel="label"
+            optionValue="value"
+            [ngModel]="translate.currentLang"
+            (onChange)="changeLanguage($event.value)"
+            styleClass="w-6rem"
+          ></p-select>
+        </div>
+
+        <div class="topbar-user">
+          <span class="app-muted">{{ auth.snapshot?.email }}</span>
+          <p-tag [value]="roleLabel(auth.snapshot?.rol)" severity="info"></p-tag>
+        </div>
+
+        <button
+          pButton
+          type="button"
+          icon="pi pi-sign-out"
+          class="p-button-outlined"
+          (click)="logout()"
+        >
+          {{ 'app.logout' | translate }}
+        </button>
+      </div>
+    </header>
+
+    <main class="app-page">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

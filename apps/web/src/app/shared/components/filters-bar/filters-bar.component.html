@@ -1,0 +1,102 @@
+<div class="filters-toolbar filters-toolbar--dashboard card-surface">
+  <div class="filters-header">
+    <div>
+      <h3 class="filters-title">{{ titleKey | translate }}</h3>
+      <p class="app-muted">{{ subtitleKey | translate }}</p>
+    </div>
+  </div>
+
+  <div class="perfect-filters-row perfect-filters-row--dashboard">
+    <div class="filter-field field-range">
+      <label>{{ 'dashboard.rango' | translate }}</label>
+      <p-select
+        [options]="rangeOptions"
+        optionLabel="label"
+        optionValue="value"
+        [(ngModel)]="rangeDays"
+        (ngModelChange)="rangeDaysChange.emit($event); onFiltersChange()"
+      ></p-select>
+    </div>
+
+    <div class="filter-field field-umbral">
+      <label>{{ 'dashboard.umbral' | translate }}</label>
+      <p-select
+        [options]="umbralOptions"
+        optionLabel="label"
+        optionValue="value"
+        [(ngModel)]="umbralDias"
+        (ngModelChange)="umbralDiasChange.emit($event); onFiltersChange()"
+      ></p-select>
+    </div>
+
+    <div class="filter-field field-cliente">
+      <label>{{ 'dashboard.cliente' | translate }}</label>
+      <p-autoComplete
+        [(ngModel)]="clienteSeleccionado"
+        [suggestions]="clienteSuggestions"
+        (completeMethod)="searchClientes.emit($event)"
+        optionLabel="nombre"
+        [dropdown]="true"
+        [forceSelection]="true"
+        (onSelect)="selectCliente($event)"
+        (onClear)="clearCliente()"
+        [showClear]="true"
+      ></p-autoComplete>
+    </div>
+
+    <div class="filter-field field-inactivos">
+      <label>{{ 'dashboard.inactivos' | translate }}</label>
+      <p-select
+        [options]="inactiveOptions"
+        optionLabel="label"
+        optionValue="value"
+        [(ngModel)]="inactiveDays"
+        (ngModelChange)="inactiveDaysChange.emit($event); onFiltersChange()"
+      ></p-select>
+    </div>
+
+    <div class="filter-field field-pagadas">
+      <div class="perfect-checkbox-inline">
+        <p-checkbox
+          [binary]="true"
+          [(ngModel)]="includePagadas"
+          (ngModelChange)="includePagadasChange.emit($event); onFiltersChange()"
+          inputId="includePagadasDash"
+          ariaLabel="{{ 'dashboard.incluirPagadas' | translate }}"
+        ></p-checkbox>
+        <label for="includePagadasDash">{{ 'dashboard.incluirPagadas' | translate }}</label>
+      </div>
+    </div>
+
+    <div class="filter-field field-action" *ngIf="showAction">
+      <label class="sr-only">{{ actionLabelKey | translate }}</label>
+      <button
+        pButton
+        type="button"
+        class="p-button-outlined"
+        [icon]="actionIcon"
+        (click)="actionClick.emit()"
+        [title]="actionTooltipKey | translate"
+      >
+        {{ actionLabelKey | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="filters-chips" *ngIf="showChips && hasActiveFilters">
+    <span class="pill">
+      {{ 'dashboard.rango' | translate }}: {{ rangeDays }} {{ 'reportes.dias' | translate }}
+    </span>
+    <span class="pill">
+      {{ 'dashboard.umbral' | translate }}: {{ umbralDias }} {{ 'reportes.dias' | translate }}
+    </span>
+    <span class="pill">
+      {{ 'dashboard.cliente' | translate }}:
+      {{ clienteSeleccionado?.nombre || ('cartera.clienteTodos' | translate) }}
+    </span>
+    <span class="pill">
+      {{ 'dashboard.inactivos' | translate }}: {{ inactiveDays }} {{ 'reportes.dias' | translate }}
+    </span>
+    <span class="pill" *ngIf="includePagadas">{{ 'dashboard.incluirPagadas' | translate }}</span>
+  </div>
+</div>

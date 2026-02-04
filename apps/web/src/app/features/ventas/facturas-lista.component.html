@@ -1,0 +1,49 @@
+<app-page-header
+  [title]="'facturas.title' | translate"
+  [subtitle]="'facturas.subtitle' | translate"
+>
+  <button *ngIf="can('ventas:facturaNueva')" pButton type="button" icon="pi pi-plus" routerLink="/app/ventas/factura-nueva">
+    {{ 'facturas.nueva' | translate }}
+  </button>
+</app-page-header>
+
+<div class="card-surface p-3">
+  <p-table [value]="(facturas$ | async) ?? []" [rows]="8" [paginator]="true" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>{{ 'facturas.consecutivo' | translate }}</th>
+        <th>{{ 'facturas.fecha' | translate }}</th>
+        <th>{{ 'facturas.cliente' | translate }}</th>
+        <th>{{ 'facturas.total' | translate }}</th>
+        <th>{{ 'facturas.estado' | translate }}</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-factura>
+      <tr>
+        <td>{{ factura.consecutivo }}</td>
+        <td>{{ factura.createdAt | date: 'short' }}</td>
+        <td>{{ getClienteNombre(factura.clienteId, (clientes$ | async) || []) }}</td>
+        <td>{{ factura.total | currency:'COP':'symbol-narrow' }}</td>
+        <td>
+          <p-tag
+            *ngIf="factura.tipoPago === 'CREDITO'"
+            [value]="factura.estadoCartera || 'AL_DIA'"
+            [severity]="statusSeverity(factura.estadoCartera)"
+          ></p-tag>
+          <p-tag *ngIf="factura.tipoPago === 'CONTADO'" value="CONTADO" severity="info"></p-tag>
+        </td>
+        <td>
+          <button pButton type="button" class="p-button-text" icon="pi pi-eye" [routerLink]="['/app/ventas/facturas', factura.id]"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="text-center app-muted p-4">
+          {{ 'facturas.empty' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

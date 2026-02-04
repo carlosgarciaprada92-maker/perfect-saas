@@ -1,0 +1,105 @@
+<app-page-header
+  [title]="'cartera.title' | translate"
+  [subtitle]="'cartera.subtitle' | translate"
+></app-page-header>
+
+<div class="card-surface p-3 mb-3">
+  <div class="grid">
+    <div class="col-12 md:col-4">
+      <label>{{ 'cartera.estado' | translate }}</label>
+      <p-select
+        [options]="[
+          { label: 'AL_DIA', value: 'AL_DIA' },
+          { label: 'PROXIMO_VENCER', value: 'PROXIMO_VENCER' },
+          { label: 'VENCIDO', value: 'VENCIDO' },
+          { label: 'PAGADA', value: 'PAGADA' }
+        ]"
+        optionLabel="label"
+        optionValue="value"
+        (onChange)="updateFilter('estado', $event.value)"
+        placeholder="{{ 'cartera.estadoTodos' | translate }}"
+      ></p-select>
+    </div>
+    <div class="col-12 md:col-4">
+      <label>{{ 'cartera.cliente' | translate }}</label>
+      <p-select
+        [options]="(clientes$ | async) ?? []"
+        optionLabel="nombre"
+        optionValue="id"
+        placeholder="{{ 'cartera.clienteTodos' | translate }}"
+        (onChange)="updateFilter('clienteId', $event.value)"
+      ></p-select>
+    </div>
+    <div class="col-12 md:col-4">
+      <label>{{ 'cartera.rango' | translate }}</label>
+      <p-datepicker
+        selectionMode="range"
+        [(ngModel)]="rangeValue"
+        (ngModelChange)="updateFilter('rango', $event)"
+        dateFormat="dd/mm/yy"
+      ></p-datepicker>
+    </div>
+    <div class="col-12 md:col-4 flex align-items-end">
+      <div class="flex align-items-center gap-2">
+        <p-checkbox
+          [binary]="true"
+          [(ngModel)]="verPagadas"
+          (onChange)="togglePagadas($event.checked)"
+          inputId="verPagadas"
+        ></p-checkbox>
+        <label for="verPagadas">{{ 'cartera.verPagadas' | translate }}</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card-surface p-3">
+  <div class="flex justify-content-between mb-3">
+    <strong>{{ 'cartera.totalPendiente' | translate }}</strong>
+    <strong>{{ totalPendiente$ | async | currency:'COP':'symbol-narrow' }}</strong>
+  </div>
+
+  <p-table [value]="(filtered$ | async) ?? []" [rows]="8" [paginator]="true" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>{{ 'cartera.factura' | translate }}</th>
+        <th>{{ 'cartera.cliente' | translate }}</th>
+        <th>{{ 'cartera.vencimiento' | translate }}</th>
+        <th>{{ 'cartera.estado' | translate }}</th>
+        <th>{{ 'cartera.total' | translate }}</th>
+        <th>{{ 'cartera.cargoAdmin' | translate }}</th>
+        <th>{{ 'cartera.acciones' | translate }}</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-factura>
+      <tr>
+        <td>{{ factura.consecutivo }}</td>
+        <td>{{ getClienteNombre(factura.clienteId) }}</td>
+        <td>{{ factura.fechaVencimiento | date:'shortDate' }}</td>
+        <td>
+          <p-tag [value]="factura.estadoCartera || 'AL_DIA'" [severity]="statusSeverity(factura.estadoCartera)"></p-tag>
+        </td>
+        <td>{{ factura.saldoPendiente | currency:'COP':'symbol-narrow' }}</td>
+        <td>{{ calcCargoAdmin(factura.total) | currency:'COP':'symbol-narrow' }}</td>
+        <td>
+          <button
+            *ngIf="can('ventas:marcarPagada') && factura.saldoPendiente > 0"
+            pButton
+            type="button"
+            class="p-button-text"
+            (click)="markAsPaid(factura)"
+          >
+            {{ 'cartera.marcarPagada' | translate }}
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="text-center app-muted p-4">
+          {{ 'cartera.empty' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

@@ -1,0 +1,50 @@
+<app-page-header
+  [title]="isEdit ? ('productos.editarTitle' | translate) : ('productos.nuevoTitle' | translate)"
+  [subtitle]="'productos.formSubtitle' | translate"
+></app-page-header>
+
+<p-card class="card-surface p-3">
+  <form [formGroup]="form" class="grid">
+    <div class="col-12 md:col-6 flex flex-column gap-2">
+      <label>{{ 'productos.nombre' | translate }}</label>
+      <input pInputText formControlName="nombre" />
+    </div>
+    <div class="col-12 md:col-6 flex flex-column gap-2">
+      <label>SKU</label>
+      <input pInputText formControlName="sku" />
+    </div>
+    <div class="col-12 flex flex-column gap-2">
+      <label>{{ 'productos.descripcion' | translate }}</label>
+      <textarea pInputTextarea rows="3" formControlName="descripcion"></textarea>
+    </div>
+    <div class="col-12 md:col-4 flex flex-column gap-2">
+      <label>{{ 'productos.precio' | translate }}</label>
+      <p-inputNumber formControlName="precioBase" mode="currency" currency="COP" locale="es-CO"></p-inputNumber>
+    </div>
+    <div class="col-12 md:col-4 flex flex-column gap-2">
+      <label>{{ 'productos.unidad' | translate }}</label>
+      <input pInputText formControlName="unidad" />
+    </div>
+    <div class="col-12 md:col-4 flex flex-column gap-2">
+      <label>{{ 'productos.stockActual' | translate }}</label>
+      <p-inputNumber formControlName="stockActual" [min]="0"></p-inputNumber>
+    </div>
+    <div class="col-12 md:col-4 flex flex-column gap-2">
+      <label>{{ 'productos.stockMinimo' | translate }}</label>
+      <p-inputNumber formControlName="stockMinimo" [min]="0"></p-inputNumber>
+    </div>
+    <div class="col-12 md:col-4 flex flex-column gap-2 mt-4">
+      <p-checkbox formControlName="activo" [binary]="true" inputId="activo"></p-checkbox>
+      <label for="activo">{{ 'productos.activo' | translate }}</label>
+    </div>
+  </form>
+
+  <div class="flex justify-content-end mt-4 gap-2">
+    <button pButton type="button" class="p-button-text" routerLink="/app/productos/lista">
+      {{ 'app.cancelar' | translate }}
+    </button>
+    <button pButton type="button" (click)="save()">
+      {{ 'app.guardar' | translate }}
+    </button>
+  </div>
+</p-card>

@@ -1,0 +1,41 @@
+<app-page-header
+  [title]="'facturas.detalleTitle' | translate"
+  [subtitle]="'facturas.detalleSubtitle' | translate"
+>
+  <button pButton type="button" icon="pi pi-print" (click)="imprimir()">
+    {{ 'facturas.imprimir' | translate }}
+  </button>
+  <button pButton type="button" class="p-button-text" routerLink="/app/ventas/facturas">
+    {{ 'app.volver' | translate }}
+  </button>
+</app-page-header>
+
+<div *ngIf="factura as f; else emptyState" class="ticket">
+  <h3>Perfect</h3>
+  <p>{{ f.consecutivo }}</p>
+  <p>{{ f.createdAt | date:'short' }}</p>
+  <p>{{ 'facturas.cliente' | translate }}: {{ clienteNombre }}</p>
+  <hr />
+  <div *ngFor="let item of f.items">
+    <div class="flex justify-content-between">
+      <span>{{ item.nombreProducto }}</span>
+      <span>{{ item.totalLinea | currency:'COP':'symbol-narrow' }}</span>
+    </div>
+    <small class="app-muted">{{ item.cantidad }} x {{ item.precioUnitario | currency:'COP':'symbol-narrow' }}</small>
+    <hr />
+  </div>
+  <div class="flex justify-content-between">
+    <strong>{{ 'facturas.total' | translate }}</strong>
+    <strong>{{ f.total | currency:'COP':'symbol-narrow' }}</strong>
+  </div>
+  <p class="app-muted mt-2">{{ 'facturas.tipoPago' | translate }}: {{ f.tipoPago }}</p>
+  <p *ngIf="f.fechaVencimiento" class="app-muted">
+    {{ 'facturas.vencimiento' | translate }}: {{ f.fechaVencimiento | date:'shortDate' }}
+  </p>
+</div>
+
+<ng-template #emptyState>
+  <div class="card-surface p-4 text-center app-muted">
+    {{ 'facturas.noEncontrada' | translate }}
+  </div>
+</ng-template>
