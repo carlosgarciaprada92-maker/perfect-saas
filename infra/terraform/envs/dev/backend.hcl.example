@@ -1,0 +1,5 @@
+bucket         = "perfect-tf-state-dev"
+key            = "terraform/dev/terraform.tfstate"
+region         = "us-east-1"
+dynamodb_table = "perfect-tf-locks"
+encrypt        = true

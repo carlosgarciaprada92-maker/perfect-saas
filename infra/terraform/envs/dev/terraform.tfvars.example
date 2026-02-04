@@ -1,0 +1,5 @@
+aws_region           = "us-east-1"
+name_prefix          = "perfect-dev"
+db_password          = "change-me"
+api_image_tag        = "latest"
+cors_allowed_origins = "https://dev.perfect.example.com"
