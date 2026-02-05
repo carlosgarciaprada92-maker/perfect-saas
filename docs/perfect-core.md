@@ -93,5 +93,6 @@ npm run start
 
 ## Notas
 - BaseUrl de módulos vive en `ModuleCatalog` y se puede ajustar desde Platform Admin.
+- En DEV la IP pública puede cambiar tras redeploy; actualizar `CORE_DEFAULT_MODULE_BASEURL` o editar módulos desde `/core/platform/modules`.
 - SSO/OIDC pendiente para fase siguiente.
 
