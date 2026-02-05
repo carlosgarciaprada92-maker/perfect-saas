@@ -62,6 +62,7 @@ module "ecs" {
     Platform__BootstrapKey     = ""
     Platform__AllowDemoSeed    = "true"
     Swagger__Enabled           = "true"
+    CORE_DEFAULT_MODULE_BASEURL = "http://18.189.182.214"
   }
   tags = local.common_tags
 }

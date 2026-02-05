@@ -39,6 +39,7 @@ npm run start
 - `Tenant__HeaderName`
 - `Tenant__SlugHeaderName`
 - `Cors__AllowedOrigins`
+- `CORE_DEFAULT_MODULE_BASEURL` (opcional, para seed de URLs)
 
 ## Rutas principales
 
@@ -62,12 +63,12 @@ npm run start
 - `GET /api/v1/workspace/users` (stub)
 
 ## URLs DEV (actualizadas)
-- `http://3.145.90.129/`
-- `http://3.145.90.129/core/auth/login`
-- `http://3.145.90.129/core/workspace`
-- `http://3.145.90.129/core/platform/tenants`
-- `http://3.145.90.129/api/health`
-- `http://3.145.90.129/swagger/`
+- `http://18.189.182.214/`
+- `http://18.189.182.214/core/auth/login`
+- `http://18.189.182.214/core/workspace`
+- `http://18.189.182.214/core/platform/tenants`
+- `http://18.189.182.214/api/health`
+- `http://18.189.182.214/swagger/`
 
 ## Credenciales demo
 - PlatformAdmin: `platform.admin@perfect.demo` / `Platform123!` (tenant: `platform`)
@@ -79,6 +80,18 @@ npm run start
 3. Login TenantAdmin → ver "Mis aplicaciones".
 4. Click "Abrir" en Peluquerías/Inventarios.
 
+## QA checklist (regresión)
+1. `GET /core/auth/login` devuelve 200 y muestra textos humanos (sin llaves i18n).
+2. Cambiar idioma ES/EN desde login y topbar: debe traducir toda la UI; si falta una traducción, cae a ES.
+3. Login PlatformAdmin → `/core/platform/tenants` y la tabla renderiza al primer load (sin interacción extra).
+4. `/core/platform/modules` muestra URL base editable; guardar cambios persiste.
+5. `/core/platform/assignments` muestra URL y botón copiar funciona.
+6. Login TenantAdmin → `/core/workspace` muestra apps habilitadas.
+7. Botón “Abrir” con URL vacía → toast “URL no configurada”.
+8. Botón “Abrir” con URL no accesible → toast de error.
+9. Botón “Abrir” con URL válida → abre nueva pestaña.
+
 ## Notas
 - BaseUrl de módulos vive en `ModuleCatalog` y se puede ajustar desde Platform Admin.
 - SSO/OIDC pendiente para fase siguiente.
+
