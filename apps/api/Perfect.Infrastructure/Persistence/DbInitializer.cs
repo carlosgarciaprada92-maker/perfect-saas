@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Perfect.Domain.Entities;
 
 namespace Perfect.Infrastructure.Persistence;
@@ -49,33 +49,66 @@ public static class DbInitializer
 
     public static async Task EnsureModuleCatalogAsync(AppDbContext db, CancellationToken ct)
     {
+        var defaultBaseUrl = ResolveDefaultModuleBaseUrl();
+        const string legacyBaseUrl = "http://18.116.114.251";
+
         var seed = new[]
         {
             new ModuleCatalog
             {
                 Name = "Peluquerías",
                 Slug = "peluquerias",
-                BaseUrl = "http://18.116.114.251",
+                BaseUrl = defaultBaseUrl,
                 Status = Perfect.Domain.Enums.ModuleStatus.Active
             },
             new ModuleCatalog
             {
                 Name = "Inventarios",
                 Slug = "inventarios",
-                BaseUrl = "http://18.116.114.251",
+                BaseUrl = defaultBaseUrl,
                 Status = Perfect.Domain.Enums.ModuleStatus.Active
             }
         };
 
         foreach (var module in seed)
         {
-            var exists = await db.ModuleCatalogs.AnyAsync(x => x.Slug == module.Slug, ct);
-            if (!exists)
+            var existing = await db.ModuleCatalogs.FirstOrDefaultAsync(x => x.Slug == module.Slug, ct);
+            if (existing == null)
             {
                 db.ModuleCatalogs.Add(module);
+                continue;
+            }
+
+            var currentUrl = existing.BaseUrl?.Trim() ?? string.Empty;
+            var hasLegacyUrl = string.Equals(currentUrl, legacyBaseUrl, StringComparison.OrdinalIgnoreCase);
+            var shouldOverwrite = string.IsNullOrWhiteSpace(currentUrl) || hasLegacyUrl;
+
+            if (shouldOverwrite && !string.IsNullOrWhiteSpace(defaultBaseUrl))
+            {
+                existing.BaseUrl = defaultBaseUrl;
+            }
+            else if (hasLegacyUrl && string.IsNullOrWhiteSpace(defaultBaseUrl))
+            {
+                existing.BaseUrl = string.Empty;
+            }
+
+            if (!string.Equals(existing.Name, module.Name, StringComparison.Ordinal))
+            {
+                existing.Name = module.Name;
+            }
+
+            if (existing.Status != module.Status)
+            {
+                existing.Status = module.Status;
             }
         }
 
         await db.SaveChangesAsync(ct);
+    }
+
+    private static string ResolveDefaultModuleBaseUrl()
+    {
+        var value = Environment.GetEnvironmentVariable("CORE_DEFAULT_MODULE_BASEURL");
+        return string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim();
     }
 }

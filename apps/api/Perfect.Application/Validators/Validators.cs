@@ -119,7 +119,7 @@ public class ModuleCatalogRequestValidator : AbstractValidator<ModuleCatalogRequ
     {
         RuleFor(x => x.Name).NotEmpty().MaximumLength(160);
         RuleFor(x => x.Slug).NotEmpty().MaximumLength(120);
-        RuleFor(x => x.BaseUrl).NotEmpty().MaximumLength(500);
+        RuleFor(x => x.BaseUrl).MaximumLength(500);
         RuleFor(x => x.Status)
             .NotEmpty()
             .Must(value => Enum.TryParse<Perfect.Domain.Enums.ModuleStatus>(value, true, out _));
