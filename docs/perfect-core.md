@@ -63,12 +63,12 @@ npm run start
 - `GET /api/v1/workspace/users` (stub)
 
 ## URLs DEV (actualizadas)
-- `http://18.189.182.214/`
-- `http://18.189.182.214/core/auth/login`
-- `http://18.189.182.214/core/workspace`
-- `http://18.189.182.214/core/platform/tenants`
-- `http://18.189.182.214/api/health`
-- `http://18.189.182.214/swagger/`
+- `http://3.144.187.36/`
+- `http://3.144.187.36/core/auth/login`
+- `http://3.144.187.36/core/workspace`
+- `http://3.144.187.36/core/platform/tenants`
+- `http://3.144.187.36/api/health`
+- `http://3.144.187.36/swagger/`
 
 ## Credenciales demo
 - PlatformAdmin: `platform.admin@perfect.demo` / `Platform123!` (tenant: `platform`)
@@ -95,4 +95,5 @@ npm run start
 - BaseUrl de módulos vive en `ModuleCatalog` y se puede ajustar desde Platform Admin.
 - En DEV la IP pública puede cambiar tras redeploy; actualizar `CORE_DEFAULT_MODULE_BASEURL` o editar módulos desde `/core/platform/modules`.
 - SSO/OIDC pendiente para fase siguiente.
+
 
