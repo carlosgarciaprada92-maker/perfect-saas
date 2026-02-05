@@ -1,0 +1,65 @@
+<div class="login-page">
+  <section class="login-hero">
+    <div class="hero-badge">Perfect Core</div>
+    <h1>{{ 'login.title' | translate }}</h1>
+    <p>{{ 'login.subtitle' | translate }}</p>
+    <div class="hero-cards">
+      <div class="hero-card">
+        <h3>{{ 'login.platform' | translate }}</h3>
+        <p>{{ 'login.platformDesc' | translate }}</p>
+      </div>
+      <div class="hero-card">
+        <h3>{{ 'login.workspace' | translate }}</h3>
+        <p>{{ 'login.workspaceDesc' | translate }}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="login-form">
+    <div class="form-header">
+      <div>
+        <h2>{{ 'login.accessTitle' | translate }}</h2>
+        <p>{{ 'login.accessSubtitle' | translate }}</p>
+      </div>
+      <button pButton class="p-button-outlined" (click)="switchLanguage()">
+        {{ translate.currentLang === 'es' ? 'EN' : 'ES' }}
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+      <label>
+        {{ 'login.tenant' | translate }}
+        <input pInputText formControlName="tenantSlug" placeholder="demo" />
+      </label>
+      <label>
+        {{ 'login.email' | translate }}
+        <input pInputText formControlName="email" placeholder="admin@perfect.demo" />
+      </label>
+      <label>
+        {{ 'login.password' | translate }}
+        <p-password formControlName="password" [feedback]="false" toggleMask="true"></p-password>
+      </label>
+
+      <button pButton type="submit" [loading]="loading" class="submit-btn">
+        {{ 'login.submit' | translate }}
+      </button>
+    </form>
+
+    <p-divider></p-divider>
+
+    <div class="demo-box">
+      <div>
+        <h4>{{ 'login.demoTitle' | translate }}</h4>
+        <p>{{ 'login.demoSubtitle' | translate }}</p>
+      </div>
+      <div class="demo-actions">
+        <button pButton class="p-button-text" type="button" (click)="fillDemo('platform')">
+          {{ 'login.demoPlatform' | translate }}
+        </button>
+        <button pButton class="p-button-text" type="button" (click)="fillDemo('tenant')">
+          {{ 'login.demoTenant' | translate }}
+        </button>
+      </div>
+    </div>
+  </section>
+</div>

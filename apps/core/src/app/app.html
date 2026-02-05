@@ -1,0 +1,8 @@
+<div *ngIf="(online$ | async) === false" class="offline-banner">
+  {{ 'app.offline' | translate }}
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<router-outlet></router-outlet>

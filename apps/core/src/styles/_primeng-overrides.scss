@@ -1,0 +1,69 @@
+.p-button:not(.p-button-text):not(.p-button-outlined) {
+  background: var(--perfect-primary-base) !important;
+  border-color: var(--perfect-primary-base) !important;
+  color: var(--perfect-surface) !important;
+}
+
+.p-button:not(.p-button-text):not(.p-button-outlined):hover {
+  background: var(--perfect-primary-soft) !important;
+  border-color: var(--perfect-primary-soft) !important;
+}
+
+.p-button:not(.p-button-text):not(.p-button-outlined):active {
+  background: var(--perfect-primary-dark) !important;
+  border-color: var(--perfect-primary-dark) !important;
+}
+
+.p-button.p-button-outlined {
+  color: var(--perfect-primary-base) !important;
+  border-color: var(--perfect-border-soft) !important;
+  background: transparent;
+}
+
+.p-button.p-button-text {
+  color: var(--perfect-primary-soft) !important;
+}
+
+.p-inputtext,
+.p-dropdown,
+.p-password input {
+  background: var(--perfect-input-bg) !important;
+}
+
+.p-inputtext:focus,
+.p-dropdown:focus,
+.p-focus {
+  box-shadow: var(--p-focus-ring-shadow) !important;
+  border-color: var(--perfect-primary-base) !important;
+}
+
+.p-tag {
+  background: var(--perfect-accent-soft-bg) !important;
+  color: var(--perfect-primary-dark) !important;
+}
+
+.p-datatable {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--perfect-border-soft) !important;
+}
+
+.p-datatable .p-datatable-header,
+.p-datatable .p-datatable-thead > tr > th {
+  background: var(--perfect-card-highlight) !important;
+  border-color: var(--perfect-border-soft) !important;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  border-color: var(--perfect-border-soft) !important;
+}
+
+.p-togglebutton.p-highlight {
+  background: var(--perfect-accent-base) !important;
+  border-color: var(--perfect-accent-base) !important;
+}
+
+.p-dropdown-panel,
+.p-overlaypanel {
+  border-color: var(--perfect-border-soft) !important;
+}

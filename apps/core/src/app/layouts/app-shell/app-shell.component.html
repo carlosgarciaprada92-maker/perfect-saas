@@ -1,0 +1,76 @@
+<div class="layout-shell" [class.collapsed]="collapsed">
+  <div class="sidebar-backdrop" *ngIf="sidebarOpen" (click)="closeSidebar()"></div>
+  <aside class="sidebar" [class.open]="sidebarOpen">
+    <div class="logo">
+      <div class="logo-mark">P</div>
+      <div class="logo-text">
+        <div>Perfect</div>
+        <small>Core</small>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-title">{{ 'nav.workspace' | translate }}</div>
+      <a class="nav-link" routerLink="/workspace" routerLinkActive="active" *ngIf="isTenantAdmin">
+        <i class="pi pi-th-large"></i>
+        <span>{{ 'nav.apps' | translate }}</span>
+      </a>
+    </div>
+
+    <div class="nav-section" *ngIf="isPlatformAdmin">
+      <div class="nav-title">{{ 'nav.platform' | translate }}</div>
+      <a class="nav-link" routerLink="/platform/tenants" routerLinkActive="active">
+        <i class="pi pi-building"></i>
+        <span>{{ 'nav.tenants' | translate }}</span>
+      </a>
+      <a class="nav-link" routerLink="/platform/modules" routerLinkActive="active">
+        <i class="pi pi-box"></i>
+        <span>{{ 'nav.modules' | translate }}</span>
+      </a>
+      <a class="nav-link" routerLink="/platform/assignments" routerLinkActive="active">
+        <i class="pi pi-sliders-h"></i>
+        <span>{{ 'nav.assignments' | translate }}</span>
+      </a>
+    </div>
+
+    <button pButton class="p-button-text collapse-btn" (click)="toggleCollapse()">
+      <i class="pi" [ngClass]="collapsed ? 'pi-angle-right' : 'pi-angle-left'"></i>
+      <span>{{ collapsed ? ('nav.expand' | translate) : ('nav.collapse' | translate) }}</span>
+    </button>
+  </aside>
+
+  <div class="content-area">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button pButton class="p-button-text" icon="pi pi-bars" (click)="toggleSidebar()"></button>
+        <div class="tenant-pill" *ngIf="tenantLabel">{{ tenantLabel }}</div>
+      </div>
+      <div class="actions">
+        <p-select
+          *ngIf="showTenantSelector"
+          [options]="tenantOptions"
+          [(ngModel)]="selectedTenant"
+          placeholder="Tenant"
+          styleClass="tenant-select"
+        ></p-select>
+        <button pButton class="p-button-outlined" (click)="switchLanguage()">
+          {{ (translate.currentLang === 'es' ? 'EN' : 'ES') }}
+        </button>
+        <div class="user-chip">
+          <div>
+            <strong>{{ userName }}</strong>
+            <small>{{ userEmail }}</small>
+          </div>
+        </div>
+        <button pButton class="p-button-text" (click)="logout()">
+          <i class="pi pi-sign-out"></i>
+          <span>{{ 'nav.logout' | translate }}</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="app-page">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

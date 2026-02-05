@@ -1,0 +1,149 @@
+@use './styles/perfect-tokens';
+@use './styles/primeng-overrides';
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&family=Sora:wght@300;400;600;700&display=swap');
+@import 'primeflex/primeflex.css';
+@import 'primeicons/primeicons.css';
+
+:root {
+  --font-body: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+  --font-display: 'Sora', 'Segoe UI', sans-serif;
+  --shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--perfect-background-main);
+  color: var(--perfect-ink);
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-page {
+  padding: 1.5rem clamp(1rem, 3vw, 2rem) 2.5rem;
+}
+
+.offline-banner {
+  background: var(--perfect-info-soft);
+  color: var(--perfect-status-blue-text);
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.layout-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  transition: grid-template-columns 0.2s ease;
+}
+
+.layout-shell.collapsed {
+  grid-template-columns: 80px 1fr;
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, var(--perfect-primary-dark) 0%, var(--perfect-primary-base) 100%);
+  color: var(--perfect-info-light);
+  padding: 1.5rem 1rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sidebar .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: 12px;
+  margin-bottom: 0.25rem;
+  color: var(--perfect-info-light);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--perfect-surface);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: var(--perfect-surface);
+  border-bottom: 1px solid var(--perfect-border-soft);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.content-area {
+  min-height: 100vh;
+  min-width: 0;
+}
+
+.card-surface {
+  background: var(--perfect-surface);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+@media (max-width: 1024px) {
+  .layout-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.25);
+    z-index: 2;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 260px;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    z-index: 4;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}

@@ -1,0 +1,39 @@
+<section class="page-header">
+  <div>
+    <h1>{{ 'platform.tenants.title' | translate }}</h1>
+    <p>{{ 'platform.tenants.subtitle' | translate }}</p>
+  </div>
+  <div class="header-actions">
+    <input pInputText [(ngModel)]="search" (keyup.enter)="loadTenants()" placeholder="{{ 'platform.tenants.search' | translate }}" />
+    <button pButton type="button" icon="pi pi-search" (click)="loadTenants()"></button>
+  </div>
+</section>
+
+<p-table [value]="tenants" [loading]="loading" styleClass="p-datatable-gridlines">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>{{ 'platform.tenants.name' | translate }}</th>
+      <th>{{ 'platform.tenants.slug' | translate }}</th>
+      <th>{{ 'platform.tenants.plan' | translate }}</th>
+      <th>{{ 'platform.tenants.status' | translate }}</th>
+      <th>{{ 'platform.tenants.action' | translate }}</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-tenant>
+    <tr>
+      <td>
+        <strong>{{ tenant.displayName || tenant.name }}</strong>
+      </td>
+      <td>{{ tenant.slug }}</td>
+      <td>{{ tenant.plan }}</td>
+      <td>
+        <p-tag [value]="tenant.status" [severity]="tenant.status === 'Active' ? 'success' : 'danger'"></p-tag>
+      </td>
+      <td>
+        <button pButton class="p-button-outlined" (click)="toggleStatus(tenant)">
+          {{ tenant.status === 'Active' ? ('platform.tenants.suspended' | translate) : ('platform.tenants.active' | translate) }}
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

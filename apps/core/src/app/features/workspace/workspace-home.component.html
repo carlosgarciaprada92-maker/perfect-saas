@@ -1,0 +1,30 @@
+<section class="page-header">
+  <div>
+    <h1>{{ 'workspace.title' | translate }}</h1>
+    <p>{{ 'workspace.subtitle' | translate }}</p>
+  </div>
+</section>
+
+<div class="apps-grid" *ngIf="apps.length > 0; else emptyState">
+  <p-card class="app-card" *ngFor="let app of apps">
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <div>
+          <h3>{{ app.name }}</h3>
+          <small>{{ app.slug }}</small>
+        </div>
+        <p-tag [value]="app.status" [severity]="app.status === 'Active' ? 'success' : 'info'"></p-tag>
+      </div>
+    </ng-template>
+    <p>{{ 'workspace.cardHint' | translate }}</p>
+    <button pButton type="button" (click)="openApp(app)" [disabled]="!app.baseUrl || !app.enabled">
+      {{ 'workspace.open' | translate }}
+    </button>
+  </p-card>
+</div>
+
+<ng-template #emptyState>
+  <div class="empty-state">
+    {{ loading ? ('workspace.loading' | translate) : ('workspace.empty' | translate) }}
+  </div>
+</ng-template>

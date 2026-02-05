@@ -1,0 +1,43 @@
+:root {
+  --perfect-primary-dark: #3a0ca3;
+  --perfect-primary-base: #4c1d95;
+  --perfect-primary-soft: #5b21b6;
+  --perfect-primary-light: #7c3aed;
+  --perfect-accent-base: #2563eb;
+  --perfect-accent-hover: #1d4ed8;
+  --perfect-accent-light: #60a5fa;
+  --perfect-accent-soft-bg: #dbeafe;
+  --perfect-info-light: #eff6ff;
+  --perfect-info-soft: #e0e7ff;
+  --perfect-card-highlight: #eef2ff;
+  --perfect-status-blue: #6366f1;
+  --perfect-status-blue-soft: #c7d2fe;
+  --perfect-status-blue-text: #4338ca;
+  --perfect-background-main: #f8fafc;
+  --perfect-border-soft: #e2e8f0;
+  --perfect-input-bg: #f1f5f9;
+  --perfect-text-secondary: #64748b;
+
+  --perfect-surface: #ffffff;
+  --perfect-ink: #0f172a;
+
+  --primary: var(--perfect-primary-base);
+  --primary-hover: var(--perfect-primary-soft);
+  --primary-active: var(--perfect-primary-dark);
+  --focus-ring: rgba(124, 58, 237, 0.25);
+
+  --p-primary-color: var(--perfect-primary-base) !important;
+  --p-primary-contrast-color: var(--perfect-surface) !important;
+  --p-primary-hover-color: var(--perfect-primary-soft) !important;
+  --p-primary-active-color: var(--perfect-primary-dark) !important;
+
+  --p-highlight-background: var(--perfect-accent-soft-bg) !important;
+  --p-highlight-focus-background: var(--perfect-info-soft) !important;
+  --p-highlight-color: var(--perfect-primary-dark) !important;
+
+  --p-form-field-background: var(--perfect-input-bg) !important;
+  --p-form-field-border-color: var(--perfect-border-soft) !important;
+  --p-form-field-hover-border-color: var(--perfect-accent-light) !important;
+  --p-form-field-focus-border-color: var(--perfect-primary-base) !important;
+  --p-focus-ring-shadow: 0 0 0 0.2rem var(--focus-ring) !important;
+}

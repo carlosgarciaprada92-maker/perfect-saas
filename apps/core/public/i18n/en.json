@@ -1,0 +1,81 @@
+{
+  "app": {
+    "offline": "You are offline. Some actions may fail."
+  },
+  "nav": {
+    "workspace": "Workspace",
+    "platform": "Platform",
+    "tenants": "Tenants",
+    "modules": "Modules",
+    "assignments": "Assignments",
+    "apps": "My apps",
+    "logout": "Sign out",
+    "collapse": "Collapse",
+    "expand": "Expand"
+  },
+  "login": {
+    "title": "Control & Workspace in one place",
+    "subtitle": "Perfect Core centralizes multi-tenant ops and module access.",
+    "platform": "Control Plane",
+    "platformDesc": "Manage tenants, module catalog, and assignments.",
+    "workspace": "Workspace",
+    "workspaceDesc": "Clients launch enabled apps in seconds.",
+    "accessTitle": "Sign in",
+    "accessSubtitle": "Use your email, password, and tenant slug.",
+    "tenant": "Tenant slug",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "demoTitle": "Demo access",
+    "demoSubtitle": "Load sample credentials for quick testing.",
+    "demoPlatform": "PlatformAdmin",
+    "demoTenant": "TenantAdmin"
+  },
+  "workspace": {
+    "title": "My apps",
+    "subtitle": "Launch enabled modules for your tenant.",
+    "cardHint": "Opens in a new tab.",
+    "open": "Open",
+    "empty": "No modules assigned yet.",
+    "loading": "Loading modules..."
+  },
+  "platform": {
+    "tenants": {
+      "title": "Tenants",
+      "subtitle": "Manage tenant status.",
+      "search": "Search tenant",
+      "name": "Name",
+      "slug": "Slug",
+      "plan": "Plan",
+      "status": "Status",
+      "action": "Actions",
+      "active": "Active",
+      "suspended": "Suspended"
+    },
+    "modules": {
+      "title": "Module catalog",
+      "subtitle": "Configure available apps in Perfect.",
+      "new": "New module",
+      "edit": "Edit module",
+      "name": "Name",
+      "slug": "Slug",
+      "baseUrl": "Base URL",
+      "status": "Status",
+      "icon": "Icon",
+      "action": "Actions"
+    },
+    "assignments": {
+      "title": "Assignments",
+      "subtitle": "Enable modules per tenant.",
+      "selectTenant": "Select a tenant",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "empty": "No modules available.",
+      "loading": "Loading assignments..."
+    }
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel"
+  }
+}

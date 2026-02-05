@@ -1,0 +1,81 @@
+{
+  "app": {
+    "offline": "Sin conexión. Algunas acciones pueden fallar."
+  },
+  "nav": {
+    "workspace": "Workspace",
+    "platform": "Platform",
+    "tenants": "Tenants",
+    "modules": "Modules",
+    "assignments": "Assignments",
+    "apps": "Mis aplicaciones",
+    "logout": "Salir",
+    "collapse": "Colapsar",
+    "expand": "Expandir"
+  },
+  "login": {
+    "title": "Control y Workspace en un solo lugar",
+    "subtitle": "Perfect Core centraliza la operación multi-tenant y el acceso a módulos activos.",
+    "platform": "Control Plane",
+    "platformDesc": "Gestiona tenants, catálogo de módulos y asignaciones.",
+    "workspace": "Workspace",
+    "workspaceDesc": "Tus clientes acceden a las apps habilitadas en segundos.",
+    "accessTitle": "Iniciar sesión",
+    "accessSubtitle": "Usa tu correo, contraseña y slug del tenant.",
+    "tenant": "Tenant slug",
+    "email": "Correo",
+    "password": "Contraseña",
+    "submit": "Entrar",
+    "demoTitle": "Accesos demo",
+    "demoSubtitle": "Cargamos credenciales de ejemplo para pruebas rápidas.",
+    "demoPlatform": "PlatformAdmin",
+    "demoTenant": "TenantAdmin"
+  },
+  "workspace": {
+    "title": "Mis aplicaciones",
+    "subtitle": "Accede a los módulos habilitados para tu tenant.",
+    "cardHint": "Abre la app en una nueva pestaña.",
+    "open": "Abrir",
+    "empty": "Aún no tienes módulos asignados.",
+    "loading": "Cargando módulos..."
+  },
+  "platform": {
+    "tenants": {
+      "title": "Tenants",
+      "subtitle": "Administra el estado de cada tenant.",
+      "search": "Buscar tenant",
+      "name": "Nombre",
+      "slug": "Slug",
+      "plan": "Plan",
+      "status": "Estado",
+      "action": "Acciones",
+      "active": "Activo",
+      "suspended": "Suspendido"
+    },
+    "modules": {
+      "title": "Catálogo de módulos",
+      "subtitle": "Configura las apps disponibles en Perfect.",
+      "new": "Nuevo módulo",
+      "edit": "Editar módulo",
+      "name": "Nombre",
+      "slug": "Slug",
+      "baseUrl": "Base URL",
+      "status": "Estado",
+      "icon": "Icono",
+      "action": "Acciones"
+    },
+    "assignments": {
+      "title": "Asignaciones",
+      "subtitle": "Habilita módulos por tenant.",
+      "selectTenant": "Selecciona un tenant",
+      "enabled": "Habilitado",
+      "disabled": "Deshabilitado",
+      "empty": "No hay módulos disponibles.",
+      "loading": "Cargando asignaciones..."
+    }
+  },
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar"
+  }
+}

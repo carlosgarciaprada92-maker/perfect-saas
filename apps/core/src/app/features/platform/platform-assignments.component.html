@@ -1,0 +1,40 @@
+<section class="page-header">
+  <div>
+    <h1>{{ 'platform.assignments.title' | translate }}</h1>
+    <p>{{ 'platform.assignments.subtitle' | translate }}</p>
+  </div>
+  <div class="header-actions">
+    <p-select
+      [options]="tenants"
+      optionLabel="name"
+      optionValue="id"
+      [(ngModel)]="selectedTenantId"
+      (onChange)="loadAssignments()"
+      placeholder="{{ 'platform.assignments.selectTenant' | translate }}"
+    ></p-select>
+    <button pButton (click)="saveAssignments()">
+      {{ 'common.save' | translate }}
+    </button>
+  </div>
+</section>
+
+<div class="assignment-grid" *ngIf="assignments.length > 0; else emptyState">
+  <div class="assignment-card" *ngFor="let module of assignments">
+    <div>
+      <h3>{{ module.name }}</h3>
+      <small>{{ module.slug }}</small>
+    </div>
+    <p>{{ module.baseUrl }}</p>
+    <p-toggleButton
+      [onLabel]="'platform.assignments.enabled' | translate"
+      [offLabel]="'platform.assignments.disabled' | translate"
+      [(ngModel)]="module.enabled"
+    ></p-toggleButton>
+  </div>
+</div>
+
+<ng-template #emptyState>
+  <div class="empty-state">
+    {{ loading ? ('platform.assignments.loading' | translate) : ('platform.assignments.empty' | translate) }}
+  </div>
+</ng-template>

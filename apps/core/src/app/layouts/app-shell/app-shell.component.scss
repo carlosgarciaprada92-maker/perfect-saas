@@ -1,0 +1,95 @@
+:host {
+  display: block;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.logo-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--perfect-primary-light);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.logo-text small {
+  font-size: 0.75rem;
+  color: var(--perfect-text-secondary);
+}
+
+.nav-section {
+  margin-bottom: 1.5rem;
+}
+
+.nav-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--perfect-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.collapse-btn {
+  margin-top: auto;
+  justify-content: flex-start;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tenant-pill {
+  background: var(--perfect-accent-soft-bg);
+  color: var(--perfect-primary-dark);
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.75rem;
+  background: var(--perfect-card-highlight);
+  border-radius: 12px;
+}
+
+.user-chip small {
+  display: block;
+  color: var(--perfect-text-secondary);
+}
+
+.tenant-select {
+  min-width: 180px;
+}
+
+@media (max-width: 900px) {
+  .actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}

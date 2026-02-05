@@ -1,0 +1,26 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.dialog-form {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.dialog-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-weight: 600;
+  color: var(--perfect-primary-dark);
+}
