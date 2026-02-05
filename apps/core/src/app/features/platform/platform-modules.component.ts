@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
+import { MessageService } from 'primeng/api';
+import { catchError, finalize, of } from 'rxjs';
 import { PlatformService } from '../../core/services/platform.service';
 import { ModuleCatalog, ModuleCatalogRequest, ModuleStatus } from '../../core/models/platform.model';
 
@@ -40,7 +42,14 @@ export class PlatformModulesComponent implements OnInit {
 
   readonly form: FormGroup;
 
-  constructor(private readonly fb: FormBuilder, private readonly platform: PlatformService) {
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly platform: PlatformService,
+    private readonly messages: MessageService,
+    private readonly translate: TranslateService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly zone: NgZone
+  ) {
     this.form = this.fb.group({
       name: ['', [Validators.required]],
       slug: ['', [Validators.required]],
@@ -56,15 +65,33 @@ export class PlatformModulesComponent implements OnInit {
 
   loadModules(): void {
     this.loading = true;
-    this.platform.listModules().subscribe({
-      next: (modules) => {
-        this.modules = modules;
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-      }
-    });
+    this.platform
+      .listModules()
+      .pipe(
+        catchError(() => {
+          this.zone.run(() => {
+            this.modules = [];
+            this.messages.add({
+              severity: 'error',
+              summary: this.translate.instant('common.error'),
+              detail: this.translate.instant('platform.modules.loadError')
+            });
+          });
+          return of([] as ModuleCatalog[]);
+        }),
+        finalize(() => {
+          this.zone.run(() => {
+            this.loading = false;
+            this.cdr.markForCheck();
+          });
+        })
+      )
+      .subscribe((modules) => {
+        this.zone.run(() => {
+          this.modules = [...modules];
+          this.cdr.markForCheck();
+        });
+      });
   }
 
   openCreate(): void {

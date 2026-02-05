@@ -67,7 +67,8 @@
                                      "status":  "Estado",
                                      "action":  "Acción",
                                      "active":  "Activo",
-                                     "suspended":  "Suspendido"
+                                     "suspended":  "Suspendido",
+                                     "loadError":  "No se pudieron cargar las empresas"
                                  },
                      "modules":  {
                                      "title":  "Módulos",
@@ -81,7 +82,8 @@
                                      "icon":  "Icono",
                                      "action":  "Acción",
                                      "delete":  "Eliminar",
-                                     "emptyUrl":  "URL no configurada"
+                                     "emptyUrl":  "URL no configurada",
+                                     "loadError":  "No se pudieron cargar los módulos"
                                  },
                      "assignments":  {
                                          "title":  "Asignación de módulos",
@@ -93,7 +95,9 @@
                                          "loading":  "Cargando asignaciones...",
                                          "copyUrl":  "Copiar URL",
                                          "copied":  "URL copiada",
-                                         "copyError":  "No se pudo copiar la URL"
+                                         "copyError":  "No se pudo copiar la URL",
+                                         "loadError":  "No se pudieron cargar las asignaciones",
+                                         "loadTenantsError":  "No se pudieron cargar las empresas"
                                      }
                  },
     "common":  {

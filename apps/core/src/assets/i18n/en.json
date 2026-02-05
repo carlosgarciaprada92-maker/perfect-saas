@@ -67,7 +67,8 @@
                                      "status":  "Status",
                                      "action":  "Action",
                                      "active":  "Active",
-                                     "suspended":  "Suspended"
+                                     "suspended":  "Suspended",
+                                     "loadError":  "Unable to load companies"
                                  },
                      "modules":  {
                                      "title":  "Modules",
@@ -81,7 +82,8 @@
                                      "icon":  "Icon",
                                      "action":  "Action",
                                      "delete":  "Delete",
-                                     "emptyUrl":  "URL not configured"
+                                     "emptyUrl":  "URL not configured",
+                                     "loadError":  "Unable to load modules"
                                  },
                      "assignments":  {
                                          "title":  "Module assignments",
@@ -93,7 +95,9 @@
                                          "loading":  "Loading assignments...",
                                          "copyUrl":  "Copy URL",
                                          "copied":  "URL copied",
-                                         "copyError":  "Could not copy URL"
+                                         "copyError":  "Could not copy URL",
+                                         "loadError":  "Unable to load assignments",
+                                         "loadTenantsError":  "Unable to load companies"
                                      }
                  },
     "common":  {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -6,6 +6,7 @@ import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { MessageService } from 'primeng/api';
+import { catchError, finalize, of } from 'rxjs';
 import { PlatformService } from '../../core/services/platform.service';
 import { ModuleAssignment, TenantSummary } from '../../core/models/platform.model';
 
@@ -25,19 +26,44 @@ export class PlatformAssignmentsComponent implements OnInit {
   constructor(
     private readonly platform: PlatformService,
     private readonly messages: MessageService,
-    private readonly translate: TranslateService
+    private readonly translate: TranslateService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly zone: NgZone
   ) {}
 
   ngOnInit(): void {
-    this.platform.listTenants().subscribe((tenants) => {
-      this.tenants = tenants;
-      if (tenants.length > 0) {
-        this.selectedTenantId = tenants[0].id;
-        this.loadAssignments();
-      } else {
-        this.loading = false;
-      }
-    });
+    this.platform
+      .listTenants()
+      .pipe(
+        catchError(() => {
+          this.zone.run(() => {
+            this.tenants = [];
+            this.messages.add({
+              severity: 'error',
+              summary: this.translate.instant('common.error'),
+              detail: this.translate.instant('platform.assignments.loadTenantsError')
+            });
+          });
+          return of([] as TenantSummary[]);
+        }),
+        finalize(() => {
+          this.zone.run(() => {
+            if (!this.selectedTenantId) {
+              this.loading = false;
+            }
+            this.cdr.markForCheck();
+          });
+        })
+      )
+      .subscribe((tenants) => {
+        this.zone.run(() => {
+          this.tenants = [...tenants];
+          if (tenants.length > 0) {
+            this.selectedTenantId = tenants[0].id;
+            this.loadAssignments();
+          }
+        });
+      });
   }
 
   loadAssignments(): void {
@@ -45,15 +71,33 @@ export class PlatformAssignmentsComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.platform.listAssignments(this.selectedTenantId).subscribe({
-      next: (assignments) => {
-        this.assignments = assignments;
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-      }
-    });
+    this.platform
+      .listAssignments(this.selectedTenantId)
+      .pipe(
+        catchError(() => {
+          this.zone.run(() => {
+            this.assignments = [];
+            this.messages.add({
+              severity: 'error',
+              summary: this.translate.instant('common.error'),
+              detail: this.translate.instant('platform.assignments.loadError')
+            });
+          });
+          return of([] as ModuleAssignment[]);
+        }),
+        finalize(() => {
+          this.zone.run(() => {
+            this.loading = false;
+            this.cdr.markForCheck();
+          });
+        })
+      )
+      .subscribe((assignments) => {
+        this.zone.run(() => {
+          this.assignments = [...assignments];
+          this.cdr.markForCheck();
+        });
+      });
   }
 
   saveAssignments(): void {
