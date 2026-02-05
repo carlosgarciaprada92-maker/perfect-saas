@@ -68,9 +68,10 @@ export class LoginComponent {
     }
     this.loading = true;
     const { email, password } = this.form.getRawValue();
-    const tenantSlug = this.mode === 'platform' ? 'platform' : (this.form.get('tenantSlug')?.value ?? '');
+    const rawTenant = this.form.get('tenantSlug')?.value ?? '';
+    const tenantSlug = this.mode === 'platform' ? 'platform' : rawTenant;
 
-    if (this.mode === 'platform' && tenantSlug !== 'platform') {
+    if (this.mode === 'platform' && rawTenant && rawTenant !== 'platform') {
       this.form.get('tenantSlug')?.setValue('platform');
       this.messages.add({
         severity: 'info',
