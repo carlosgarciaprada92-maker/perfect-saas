@@ -60,8 +60,15 @@ export class LoginComponent {
         this.loading = false;
       },
       error: (err) => {
-        const message = err?.error?.errors?.[0]?.message || err?.error?.message || 'Login failed';
-        this.messages.add({ severity: 'error', summary: 'Error', detail: message });
+        const message =
+          err?.error?.errors?.[0]?.message ||
+          err?.error?.message ||
+          this.translate.instant('login.error');
+        this.messages.add({
+          severity: 'error',
+          summary: this.translate.instant('common.error'),
+          detail: message
+        });
         this.loading = false;
       }
     });
@@ -80,6 +87,7 @@ export class LoginComponent {
         password: 'Platform123!',
         tenantSlug: 'platform'
       });
+      this.submit();
       return;
     }
     this.form.patchValue({
@@ -87,5 +95,6 @@ export class LoginComponent {
       password: 'Admin123!',
       tenantSlug: 'demo'
     });
+    this.submit();
   }
 }

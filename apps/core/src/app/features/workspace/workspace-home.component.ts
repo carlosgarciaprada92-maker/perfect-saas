@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
+import { MessageService } from 'primeng/api';
 import { WorkspaceService } from '../../core/services/workspace.service';
 import { WorkspaceApp } from '../../core/models/workspace.model';
 
@@ -18,7 +19,11 @@ export class WorkspaceHomeComponent implements OnInit {
   apps: WorkspaceApp[] = [];
   loading = true;
 
-  constructor(private readonly workspace: WorkspaceService) {}
+  constructor(
+    private readonly workspace: WorkspaceService,
+    private readonly messages: MessageService,
+    private readonly translate: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.workspace.listApps().subscribe({
@@ -32,10 +37,51 @@ export class WorkspaceHomeComponent implements OnInit {
     });
   }
 
-  openApp(app: WorkspaceApp): void {
-    if (!app.baseUrl) {
+  async openApp(app: WorkspaceApp): Promise<void> {
+    const baseUrl = (app.baseUrl ?? '').trim();
+    if (!baseUrl) {
+      this.messages.add({
+        severity: 'warn',
+        summary: this.translate.instant('common.notice'),
+        detail: this.translate.instant('workspace.urlMissing')
+      });
       return;
     }
-    window.open(app.baseUrl, '_blank', 'noopener');
+
+    try {
+      new URL(baseUrl);
+    } catch {
+      this.messages.add({
+        severity: 'error',
+        summary: this.translate.instant('common.error'),
+        detail: this.translate.instant('workspace.urlInvalid')
+      });
+      return;
+    }
+
+    const reachable = await this.checkUrl(baseUrl);
+    if (!reachable) {
+      this.messages.add({
+        severity: 'error',
+        summary: this.translate.instant('common.error'),
+        detail: this.translate.instant('workspace.urlUnavailable')
+      });
+      return;
+    }
+
+    window.open(baseUrl, '_blank', 'noopener');
+  }
+
+  private async checkUrl(url: string): Promise<boolean> {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 3500);
+    try {
+      await fetch(url, { method: 'HEAD', mode: 'no-cors', signal: controller.signal });
+      return true;
+    } catch {
+      return false;
+    } finally {
+      clearTimeout(timeout);
+    }
   }
 }

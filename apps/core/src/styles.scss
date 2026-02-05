@@ -42,6 +42,8 @@ a {
 
 .app-page {
   padding: 1.5rem clamp(1rem, 3vw, 2rem) 2.5rem;
+  min-width: 0;
+  width: 100%;
 }
 
 .offline-banner {
@@ -57,6 +59,7 @@ a {
   display: grid;
   grid-template-columns: 280px 1fr;
   transition: grid-template-columns 0.2s ease;
+  width: 100%;
 }
 
 .layout-shell.collapsed {
@@ -111,12 +114,24 @@ a {
 .content-area {
   min-height: 100vh;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .card-surface {
   background: var(--perfect-surface);
   border-radius: 16px;
   box-shadow: var(--shadow-soft);
+}
+
+.full-width-table,
+.full-width-table .p-datatable,
+.full-width-table .p-datatable-wrapper {
+  width: 100%;
+}
+
+.full-width-table .p-datatable-wrapper {
+  overflow: auto;
 }
 
 @media (max-width: 1024px) {

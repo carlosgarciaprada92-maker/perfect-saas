@@ -56,7 +56,7 @@ export class AppShellComponent implements OnInit {
   }
 
   get tenantLabel(): string | null {
-    return this.auth.tenantSlug ? `Tenant: ${this.auth.tenantSlug}` : null;
+    return this.auth.tenantSlug ?? null;
   }
 
   get isPlatformAdmin(): boolean {

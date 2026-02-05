@@ -9,7 +9,7 @@
   </div>
 </section>
 
-<p-table [value]="tenants" [loading]="loading" styleClass="p-datatable-gridlines">
+<p-table [value]="tenants" [loading]="loading" styleClass="p-datatable-gridlines full-width-table" responsiveLayout="scroll">
   <ng-template pTemplate="header">
     <tr>
       <th>{{ 'platform.tenants.name' | translate }}</th>

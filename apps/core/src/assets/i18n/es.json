@@ -1,0 +1,102 @@
+﻿{
+    "app":  {
+                "offline":  "Sin conexión. Algunas acciones pueden fallar."
+            },
+    "nav":  {
+                "workspace":  "Workspace",
+                "apps":  "Aplicaciones",
+                "platform":  "Plataforma",
+                "tenants":  "Empresas",
+                "modules":  "Módulos",
+                "assignments":  "Asignaciones",
+                "collapse":  "Colapsar",
+                "expand":  "Expandir",
+                "logout":  "Cerrar sesión",
+                "tenantLabel":  "Empresa",
+                "tenantPlaceholder":  "Selecciona empresa"
+            },
+    "login":  {
+                  "title":  "Acceso a Perfect Core",
+                  "subtitle":  "Control y acceso a tus módulos en un solo lugar.",
+                  "platform":  "Admin de Plataforma",
+                  "platformDesc":  "Gestiona empresas, catálogo de módulos y asignaciones.",
+                  "workspace":  "Portal del Cliente",
+                  "workspaceDesc":  "Accede a tus aplicaciones habilitadas.",
+                  "accessTitle":  "Iniciar sesión",
+                  "accessSubtitle":  "Ingresa tus credenciales para continuar.",
+                  "tenant":  "Empresa (tenant)",
+                  "email":  "Correo",
+                  "password":  "Contraseña",
+                  "submit":  "Iniciar sesión",
+                  "demoTitle":  "Entrar como demo",
+                  "demoSubtitle":  "Carga credenciales de ejemplo y accede.",
+                  "demoPlatform":  "Admin Perfect (Platform)",
+                  "demoTenant":  "Cliente Demo (Workspace)",
+                  "error":  "No se pudo iniciar sesión"
+              },
+    "workspace":  {
+                      "title":  "Mis aplicaciones",
+                      "subtitle":  "Módulos habilitados para tu empresa.",
+                      "cardHint":  "Se abrirá en una nueva pestaña.",
+                      "open":  "Abrir",
+                      "empty":  "No hay aplicaciones habilitadas.",
+                      "loading":  "Cargando aplicaciones...",
+                      "urlMissing":  "URL no configurada",
+                      "urlUnavailable":  "No se puede acceder a la URL",
+                      "urlInvalid":  "URL inválida"
+                  },
+    "platform":  {
+                     "tenants":  {
+                                     "title":  "Empresas",
+                                     "subtitle":  "Administra empresas y su estado.",
+                                     "search":  "Buscar empresa",
+                                     "name":  "Nombre",
+                                     "slug":  "Slug",
+                                     "plan":  "Plan",
+                                     "status":  "Estado",
+                                     "action":  "Acción",
+                                     "active":  "Activo",
+                                     "suspended":  "Suspendido"
+                                 },
+                     "modules":  {
+                                     "title":  "Módulos",
+                                     "subtitle":  "Configura el catálogo de aplicaciones.",
+                                     "new":  "Nuevo",
+                                     "edit":  "Editar",
+                                     "name":  "Nombre",
+                                     "slug":  "Slug",
+                                     "baseUrl":  "URL base",
+                                     "status":  "Estado",
+                                     "icon":  "Icono",
+                                     "action":  "Acción",
+                                     "delete":  "Eliminar",
+                                     "emptyUrl":  "URL no configurada"
+                                 },
+                     "assignments":  {
+                                         "title":  "Asignación de módulos",
+                                         "subtitle":  "Habilita módulos por empresa.",
+                                         "selectTenant":  "Selecciona empresa",
+                                         "enabled":  "Habilitado",
+                                         "disabled":  "Deshabilitado",
+                                         "empty":  "No hay módulos disponibles.",
+                                         "loading":  "Cargando asignaciones...",
+                                         "copyUrl":  "Copiar URL",
+                                         "copied":  "URL copiada",
+                                         "copyError":  "No se pudo copiar la URL"
+                                     }
+                 },
+    "common":  {
+                   "save":  "Guardar",
+                   "cancel":  "Cancelar",
+                   "edit":  "Editar",
+                   "delete":  "Eliminar",
+                   "search":  "Buscar",
+                   "active":  "Activo",
+                   "suspended":  "Suspendido",
+                   "beta":  "Beta",
+                   "disabled":  "Deshabilitado",
+                   "close":  "Cerrar",
+                   "notice":  "Atención",
+                   "error":  "Error"
+               }
+}

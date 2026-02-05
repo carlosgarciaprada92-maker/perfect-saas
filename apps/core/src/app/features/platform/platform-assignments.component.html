@@ -24,7 +24,13 @@
       <h3>{{ module.name }}</h3>
       <small>{{ module.slug }}</small>
     </div>
-    <p>{{ module.baseUrl }}</p>
+    <div class="assignment-url">
+      <span>{{ module.baseUrl || ('platform.modules.emptyUrl' | translate) }}</span>
+      <button pButton class="p-button-text p-button-sm" type="button" (click)="copyUrl(module)">
+        <i class="pi pi-copy"></i>
+        {{ 'platform.assignments.copyUrl' | translate }}
+      </button>
+    </div>
     <p-toggleButton
       [onLabel]="'platform.assignments.enabled' | translate"
       [offLabel]="'platform.assignments.disabled' | translate"

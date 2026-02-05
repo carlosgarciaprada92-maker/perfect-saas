@@ -21,8 +21,10 @@ export class App {
     private readonly connectivity: ConnectivityService
   ) {
     const savedLang = localStorage.getItem('core_lang') ?? 'es';
+    const lang = savedLang === 'en' ? 'en' : 'es';
+    this.translate.addLangs(['es', 'en']);
     this.translate.setDefaultLang('es');
-    this.translate.use(savedLang);
+    this.translate.use(lang);
     this.online$ = this.connectivity.online$;
   }
 }

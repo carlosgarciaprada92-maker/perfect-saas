@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { MessageService } from 'primeng/api';
 import { PlatformService } from '../../core/services/platform.service';
 import { ModuleAssignment, TenantSummary } from '../../core/models/platform.model';
 
@@ -21,7 +22,11 @@ export class PlatformAssignmentsComponent implements OnInit {
   selectedTenantId: string | null = null;
   loading = true;
 
-  constructor(private readonly platform: PlatformService) {}
+  constructor(
+    private readonly platform: PlatformService,
+    private readonly messages: MessageService,
+    private readonly translate: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.platform.listTenants().subscribe((tenants) => {
@@ -64,5 +69,34 @@ export class PlatformAssignmentsComponent implements OnInit {
         }))
       })
       .subscribe();
+  }
+
+  copyUrl(module: ModuleAssignment): void {
+    const url = (module.baseUrl ?? '').trim();
+    if (!url) {
+      this.messages.add({
+        severity: 'warn',
+        summary: this.translate.instant('common.notice'),
+        detail: this.translate.instant('platform.modules.emptyUrl')
+      });
+      return;
+    }
+
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        this.messages.add({
+          severity: 'success',
+          summary: this.translate.instant('common.notice'),
+          detail: this.translate.instant('platform.assignments.copied')
+        });
+      })
+      .catch(() => {
+        this.messages.add({
+          severity: 'error',
+          summary: this.translate.instant('common.error'),
+          detail: this.translate.instant('platform.assignments.copyError')
+        });
+      });
   }
 }

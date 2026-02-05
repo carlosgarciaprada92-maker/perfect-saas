@@ -3,12 +3,13 @@ import { provideRouter } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, MissingTranslationHandler } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 import { PerfectPreset } from './core/theme/perfect-preset';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { FallbackMissingTranslationHandler } from './core/i18n/fallback-missing-translation.handler';
 
 import { routes } from './app.routes';
 
@@ -27,8 +28,17 @@ export const appConfig: ApplicationConfig = {
         }
       }
     }),
-    importProvidersFrom(TranslateModule.forRoot({ defaultLanguage: 'es' })),
-    provideTranslateHttpLoader({ prefix: '/i18n/', suffix: '.json' }),
+    importProvidersFrom(
+      TranslateModule.forRoot({
+        defaultLanguage: 'es',
+        useDefaultLang: true,
+        missingTranslationHandler: {
+          provide: MissingTranslationHandler,
+          useClass: FallbackMissingTranslationHandler
+        }
+      })
+    ),
+    provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' }),
     MessageService,
     ConfirmationService,
     provideServiceWorker('ngsw-worker.js', {

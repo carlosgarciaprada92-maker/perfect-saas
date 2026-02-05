@@ -43,14 +43,16 @@
     <header class="topbar">
       <div class="topbar-left">
         <button pButton class="p-button-text" icon="pi pi-bars" (click)="toggleSidebar()"></button>
-        <div class="tenant-pill" *ngIf="tenantLabel">{{ tenantLabel }}</div>
+        <div class="tenant-pill" *ngIf="tenantLabel">
+          {{ 'nav.tenantLabel' | translate }}: {{ tenantLabel }}
+        </div>
       </div>
       <div class="actions">
         <p-select
           *ngIf="showTenantSelector"
           [options]="tenantOptions"
           [(ngModel)]="selectedTenant"
-          placeholder="Tenant"
+          placeholder="{{ 'nav.tenantPlaceholder' | translate }}"
           styleClass="tenant-select"
         ></p-select>
         <button pButton class="p-button-outlined" (click)="switchLanguage()">

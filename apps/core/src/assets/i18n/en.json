@@ -1,0 +1,102 @@
+﻿{
+    "app":  {
+                "offline":  "Offline. Some actions may fail."
+            },
+    "nav":  {
+                "workspace":  "Workspace",
+                "apps":  "Applications",
+                "platform":  "Platform",
+                "tenants":  "Companies",
+                "modules":  "Modules",
+                "assignments":  "Assignments",
+                "collapse":  "Collapse",
+                "expand":  "Expand",
+                "logout":  "Sign out",
+                "tenantLabel":  "Company",
+                "tenantPlaceholder":  "Select company"
+            },
+    "login":  {
+                  "title":  "Access Perfect Core",
+                  "subtitle":  "Control and access your modules in one place.",
+                  "platform":  "Platform Admin",
+                  "platformDesc":  "Manage companies, module catalog, and assignments.",
+                  "workspace":  "Customer Portal",
+                  "workspaceDesc":  "Access your enabled applications.",
+                  "accessTitle":  "Sign in",
+                  "accessSubtitle":  "Enter your credentials to continue.",
+                  "tenant":  "Company (tenant)",
+                  "email":  "Email",
+                  "password":  "Password",
+                  "submit":  "Sign in",
+                  "demoTitle":  "Sign in as demo",
+                  "demoSubtitle":  "Load demo credentials and continue.",
+                  "demoPlatform":  "Perfect Admin (Platform)",
+                  "demoTenant":  "Demo Client (Workspace)",
+                  "error":  "Login failed"
+              },
+    "workspace":  {
+                      "title":  "My applications",
+                      "subtitle":  "Modules enabled for your company.",
+                      "cardHint":  "Opens in a new tab.",
+                      "open":  "Open",
+                      "empty":  "No applications enabled yet.",
+                      "loading":  "Loading applications...",
+                      "urlMissing":  "URL not configured",
+                      "urlUnavailable":  "Cannot reach the URL",
+                      "urlInvalid":  "Invalid URL"
+                  },
+    "platform":  {
+                     "tenants":  {
+                                     "title":  "Companies",
+                                     "subtitle":  "Manage companies and their status.",
+                                     "search":  "Search company",
+                                     "name":  "Name",
+                                     "slug":  "Slug",
+                                     "plan":  "Plan",
+                                     "status":  "Status",
+                                     "action":  "Action",
+                                     "active":  "Active",
+                                     "suspended":  "Suspended"
+                                 },
+                     "modules":  {
+                                     "title":  "Modules",
+                                     "subtitle":  "Configure the application catalog.",
+                                     "new":  "New",
+                                     "edit":  "Edit",
+                                     "name":  "Name",
+                                     "slug":  "Slug",
+                                     "baseUrl":  "Base URL",
+                                     "status":  "Status",
+                                     "icon":  "Icon",
+                                     "action":  "Action",
+                                     "delete":  "Delete",
+                                     "emptyUrl":  "URL not configured"
+                                 },
+                     "assignments":  {
+                                         "title":  "Module assignments",
+                                         "subtitle":  "Enable modules per company.",
+                                         "selectTenant":  "Select company",
+                                         "enabled":  "Enabled",
+                                         "disabled":  "Disabled",
+                                         "empty":  "No modules available.",
+                                         "loading":  "Loading assignments...",
+                                         "copyUrl":  "Copy URL",
+                                         "copied":  "URL copied",
+                                         "copyError":  "Could not copy URL"
+                                     }
+                 },
+    "common":  {
+                   "save":  "Save",
+                   "cancel":  "Cancel",
+                   "edit":  "Edit",
+                   "delete":  "Delete",
+                   "search":  "Search",
+                   "active":  "Active",
+                   "suspended":  "Suspended",
+                   "beta":  "Beta",
+                   "disabled":  "Disabled",
+                   "close":  "Close",
+                   "notice":  "Notice",
+                   "error":  "Error"
+               }
+}

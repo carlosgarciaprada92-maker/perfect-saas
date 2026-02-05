@@ -24,10 +24,14 @@
                                                                                          "browser":  "src/main.ts",
                                                                                          "tsConfig":  "tsconfig.app.json",
                                                                                          "inlineStyleLanguage":  "scss",
-                                                                                         "assets":  [
+                                                                                        "assets":  [
+                                                                                                       {
+                                                                                                           "glob":  "**/*",
+                                                                                                           "input":  "public"
+                                                                                                        },
                                                                                                         {
                                                                                                             "glob":  "**/*",
-                                                                                                            "input":  "public"
+                                                                                                            "input":  "src/assets"
                                                                                                         }
                                                                                                     ],
                                                                                          "styles":  [

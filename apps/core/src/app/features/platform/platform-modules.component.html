@@ -8,7 +8,7 @@
   </button>
 </section>
 
-<p-table [value]="modules" [loading]="loading">
+<p-table [value]="modules" [loading]="loading" styleClass="p-datatable-gridlines full-width-table" responsiveLayout="scroll">
   <ng-template pTemplate="header">
     <tr>
       <th>{{ 'platform.modules.name' | translate }}</th>
@@ -24,7 +24,7 @@
         <strong>{{ module.name }}</strong>
       </td>
       <td>{{ module.slug }}</td>
-      <td>{{ module.baseUrl }}</td>
+      <td>{{ module.baseUrl || ('platform.modules.emptyUrl' | translate) }}</td>
       <td><p-tag [value]="module.status" severity="info"></p-tag></td>
       <td class="actions">
         <button pButton class="p-button-text" icon="pi pi-pencil" (click)="openEdit(module)"></button>
