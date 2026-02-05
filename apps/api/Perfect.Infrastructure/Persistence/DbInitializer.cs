@@ -58,14 +58,14 @@ public static class DbInitializer
             {
                 Name = "Peluquerías",
                 Slug = "peluquerias",
-                BaseUrl = defaultBaseUrl,
+                BaseUrl = BuildModuleUrl(defaultBaseUrl, "peluquerias"),
                 Status = Perfect.Domain.Enums.ModuleStatus.Active
             },
             new ModuleCatalog
             {
                 Name = "Inventarios",
                 Slug = "inventarios",
-                BaseUrl = defaultBaseUrl,
+                BaseUrl = BuildModuleUrl(defaultBaseUrl, "inventarios"),
                 Status = Perfect.Domain.Enums.ModuleStatus.Active
             }
         };
@@ -80,12 +80,14 @@ public static class DbInitializer
             }
 
             var currentUrl = existing.BaseUrl?.Trim() ?? string.Empty;
+            var desiredUrl = BuildModuleUrl(defaultBaseUrl, module.Slug);
             var hasLegacyUrl = string.Equals(currentUrl, legacyBaseUrl, StringComparison.OrdinalIgnoreCase);
-            var shouldOverwrite = string.IsNullOrWhiteSpace(currentUrl) || hasLegacyUrl;
+            var isBaseOnly = string.Equals(NormalizeBaseUrl(currentUrl), NormalizeBaseUrl(defaultBaseUrl), StringComparison.OrdinalIgnoreCase);
+            var shouldOverwrite = string.IsNullOrWhiteSpace(currentUrl) || hasLegacyUrl || isBaseOnly;
 
-            if (shouldOverwrite && !string.IsNullOrWhiteSpace(defaultBaseUrl))
+            if (shouldOverwrite && !string.IsNullOrWhiteSpace(desiredUrl))
             {
-                existing.BaseUrl = defaultBaseUrl;
+                existing.BaseUrl = desiredUrl;
             }
             else if (hasLegacyUrl && string.IsNullOrWhiteSpace(defaultBaseUrl))
             {
@@ -110,5 +112,21 @@ public static class DbInitializer
     {
         var value = Environment.GetEnvironmentVariable("CORE_DEFAULT_MODULE_BASEURL");
         return string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim();
+    }
+
+    private static string BuildModuleUrl(string baseUrl, string slug)
+    {
+        if (string.IsNullOrWhiteSpace(baseUrl))
+        {
+            return string.Empty;
+        }
+
+        var normalized = baseUrl.Trim().TrimEnd('/');
+        return $"{normalized}/{slug}";
+    }
+
+    private static string NormalizeBaseUrl(string value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim().TrimEnd('/');
     }
 }
