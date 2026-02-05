@@ -64,13 +64,13 @@ npm run start
 - `GET /api/v1/workspace/users` (stub)
 
 ## URLs DEV (actualizadas)
-- `http://18.220.235.58/`
-- `http://18.220.235.58/core/auth/login` (Platform Console)
-- `http://18.220.235.58/core/portal/login` (Customer Portal)
-- `http://18.220.235.58/core/workspace`
-- `http://18.220.235.58/core/platform/tenants`
-- `http://18.220.235.58/api/health`
-- `http://18.220.235.58/swagger/`
+- `http://3.148.169.222/`
+- `http://3.148.169.222/core/auth/login` (Platform Console)
+- `http://3.148.169.222/core/portal/login` (Customer Portal)
+- `http://3.148.169.222/core/workspace`
+- `http://3.148.169.222/core/platform/tenants`
+- `http://3.148.169.222/api/health`
+- `http://3.148.169.222/swagger/`
 
 ## Credenciales demo
 - PlatformAdmin: `platform.admin@perfect.demo` / `Platform123!` (tenant fijo: `platform`)
