@@ -5,12 +5,14 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build
+RUN npm run build -- --base-href /inventarios/ --deploy-url /inventarios/ --output-path /app/dist/inventarios
+RUN npm run build -- --base-href /peluquerias/ --deploy-url /peluquerias/ --output-path /app/dist/peluquerias
 
 FROM nginx:1.27-alpine AS runtime
 
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/dist/perfect-web/browser /usr/share/nginx/html
+COPY --from=builder /app/dist/inventarios /usr/share/nginx/html/inventarios
+COPY --from=builder /app/dist/peluquerias /usr/share/nginx/html/peluquerias
 
 EXPOSE 80
 
