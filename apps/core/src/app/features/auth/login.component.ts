@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
@@ -27,6 +27,7 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class LoginComponent {
   readonly form: FormGroup;
+  mode: 'platform' | 'portal' = 'platform';
 
   loading = false;
 
@@ -34,6 +35,7 @@ export class LoginComponent {
     private readonly fb: FormBuilder,
     private readonly auth: AuthService,
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly messages: MessageService,
     public readonly translate: TranslateService
   ) {
@@ -41,6 +43,11 @@ export class LoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
       tenantSlug: ['demo', [Validators.required]]
+    });
+
+    this.route.data.subscribe((data) => {
+      const mode = data['mode'] === 'portal' ? 'portal' : 'platform';
+      this.applyMode(mode);
     });
   }
 
@@ -50,7 +57,17 @@ export class LoginComponent {
       return;
     }
     this.loading = true;
-    const { email, password, tenantSlug } = this.form.getRawValue();
+    const { email, password } = this.form.getRawValue();
+    const tenantSlug = this.mode === 'platform' ? 'platform' : (this.form.get('tenantSlug')?.value ?? '');
+
+    if (this.mode === 'platform' && tenantSlug !== 'platform') {
+      this.form.get('tenantSlug')?.setValue('platform');
+      this.messages.add({
+        severity: 'info',
+        summary: this.translate.instant('common.notice'),
+        detail: this.translate.instant('login.platformOnly')
+      });
+    }
 
     this.auth.login({ email: email!, password: password!, tenantSlug: tenantSlug! }).subscribe({
       next: (response) => {
@@ -96,5 +113,25 @@ export class LoginComponent {
       tenantSlug: 'demo'
     });
     this.submit();
+  }
+
+  private applyMode(mode: 'platform' | 'portal'): void {
+    this.mode = mode;
+    const tenantControl = this.form.get('tenantSlug');
+    if (!tenantControl) {
+      return;
+    }
+
+    if (mode === 'platform') {
+      tenantControl.setValue('platform');
+      tenantControl.disable({ emitEvent: false });
+    } else {
+      if (tenantControl.disabled) {
+        tenantControl.enable({ emitEvent: false });
+      }
+      if (!tenantControl.value) {
+        tenantControl.setValue('demo');
+      }
+    }
   }
 }

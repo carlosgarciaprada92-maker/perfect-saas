@@ -45,6 +45,7 @@ npm run start
 
 ### Core (frontend)
 - `/core/auth/login`
+- `/core/portal/login`
 - `/core/workspace`
 - `/core/platform/tenants`
 - `/core/platform/modules`
@@ -64,32 +65,35 @@ npm run start
 
 ## URLs DEV (actualizadas)
 - `http://3.144.187.36/`
-- `http://3.144.187.36/core/auth/login`
+- `http://3.144.187.36/core/auth/login` (Platform Console)
+- `http://3.144.187.36/core/portal/login` (Customer Portal)
 - `http://3.144.187.36/core/workspace`
 - `http://3.144.187.36/core/platform/tenants`
 - `http://3.144.187.36/api/health`
 - `http://3.144.187.36/swagger/`
 
 ## Credenciales demo
-- PlatformAdmin: `platform.admin@perfect.demo` / `Platform123!` (tenant: `platform`)
+- PlatformAdmin: `platform.admin@perfect.demo` / `Platform123!` (tenant fijo: `platform`)
 - TenantAdmin: `admin@perfect.demo` / `Admin123!` (tenant: `demo`)
 
 ## Smoke tests
-1. Abrir `/core/auth/login`.
+1. Abrir `/core/auth/login` y verificar texto de Platform Console.
 2. Login PlatformAdmin → navegar a Tenants.
-3. Login TenantAdmin → ver "Mis aplicaciones".
-4. Click "Abrir" en Peluquerías/Inventarios.
+3. Abrir `/core/portal/login` y verificar texto de Customer Portal.
+4. Login TenantAdmin → ver "Mis aplicaciones".
+5. Click "Abrir" en Peluquerías/Inventarios.
 
 ## QA checklist (regresión)
 1. `GET /core/auth/login` devuelve 200 y muestra textos humanos (sin llaves i18n).
 2. Cambiar idioma ES/EN desde login y topbar: debe traducir toda la UI; si falta una traducción, cae a ES.
-3. Login PlatformAdmin → `/core/platform/tenants` y la tabla renderiza al primer load (sin interacción extra).
-4. `/core/platform/modules` muestra URL base editable; guardar cambios persiste.
-5. `/core/platform/assignments` muestra URL y botón copiar funciona.
-6. Login TenantAdmin → `/core/workspace` muestra apps habilitadas.
-7. Botón “Abrir” con URL vacía → toast “URL no configurada”.
-8. Botón “Abrir” con URL no accesible → toast de error.
-9. Botón “Abrir” con URL válida → abre nueva pestaña.
+3. `/core/auth/login` fuerza tenant `platform` (no editable).
+4. Login PlatformAdmin → `/core/platform/tenants` y la tabla renderiza al primer load (sin interacción extra).
+5. `/core/platform/modules` muestra URL base editable; guardar cambios persiste.
+6. `/core/platform/assignments` muestra URL y botón copiar funciona.
+7. Login TenantAdmin → `/core/workspace` muestra apps habilitadas.
+8. Botón “Abrir” con URL vacía → toast “URL no configurada”.
+9. Botón “Abrir” con URL no accesible → toast de error.
+10. Botón “Abrir” con URL válida → abre nueva pestaña.
 
 ## Notas
 - BaseUrl de módulos vive en `ModuleCatalog` y se puede ajustar desde Platform Admin.

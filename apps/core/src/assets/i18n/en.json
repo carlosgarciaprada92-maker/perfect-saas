@@ -13,7 +13,8 @@
                 "expand":  "Expand",
                 "logout":  "Sign out",
                 "tenantLabel":  "Company",
-                "tenantPlaceholder":  "Select company"
+                "tenantPlaceholder":  "Select company",
+                "goPortal":  "Go to Customer Portal"
             },
     "login":  {
                   "title":  "Access Perfect Core",
@@ -32,7 +33,17 @@
                   "demoSubtitle":  "Load demo credentials and continue.",
                   "demoPlatform":  "Perfect Admin (Platform)",
                   "demoTenant":  "Demo Client (Workspace)",
-                  "error":  "Login failed"
+                  "error":  "Login failed",
+                  "platformTitle":  "Perfect Platform Administration",
+                  "platformSubtitle":  "Exclusive access for Perfect internal team.",
+                  "portalTitle":  "Customer Portal",
+                  "portalSubtitle":  "Access your enabled modules.",
+                  "platformAccess":  "Platform administrators only.",
+                  "portalAccess":  "Enter your company tenant and credentials.",
+                  "demoPlatformHint":  "Demo access for platform admins.",
+                  "demoPortalHint":  "Demo access for customers.",
+                  "goPortal":  "Go to Customer Portal",
+                  "platformOnly":  "Platform administrators only."
               },
     "workspace":  {
                       "title":  "My applications",

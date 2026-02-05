@@ -58,6 +58,12 @@
         <button pButton class="p-button-outlined" (click)="switchLanguage()">
           {{ (translate.currentLang === 'es' ? 'EN' : 'ES') }}
         </button>
+        <a
+          *ngIf="isPlatformAdmin"
+          class="portal-link"
+          routerLink="/portal/login"
+          >{{ 'nav.goPortal' | translate }}</a
+        >
         <div class="user-chip">
           <div>
             <strong>{{ userName }}</strong>

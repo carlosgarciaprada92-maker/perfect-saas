@@ -1,8 +1,8 @@
 <div class="login-page">
   <section class="login-hero">
     <div class="hero-badge">Perfect Core</div>
-    <h1>{{ 'login.title' | translate }}</h1>
-    <p>{{ 'login.subtitle' | translate }}</p>
+    <h1>{{ (mode === 'platform' ? 'login.platformTitle' : 'login.portalTitle') | translate }}</h1>
+    <p>{{ (mode === 'platform' ? 'login.platformSubtitle' : 'login.portalSubtitle') | translate }}</p>
     <div class="hero-cards">
       <div class="hero-card">
         <h3>{{ 'login.platform' | translate }}</h3>
@@ -19,7 +19,7 @@
     <div class="form-header">
       <div>
         <h2>{{ 'login.accessTitle' | translate }}</h2>
-        <p>{{ 'login.accessSubtitle' | translate }}</p>
+        <p>{{ (mode === 'platform' ? 'login.platformAccess' : 'login.portalAccess') | translate }}</p>
       </div>
       <button pButton class="p-button-outlined" (click)="switchLanguage()">
         {{ translate.currentLang === 'es' ? 'EN' : 'ES' }}
@@ -50,16 +50,32 @@
     <div class="demo-box">
       <div>
         <h4>{{ 'login.demoTitle' | translate }}</h4>
-        <p>{{ 'login.demoSubtitle' | translate }}</p>
+        <p>{{ (mode === 'platform' ? 'login.demoPlatformHint' : 'login.demoPortalHint') | translate }}</p>
       </div>
       <div class="demo-actions">
-        <button pButton class="p-button-text" type="button" (click)="fillDemo('platform')">
+        <button
+          *ngIf="mode === 'platform'"
+          pButton
+          class="p-button-text"
+          type="button"
+          (click)="fillDemo('platform')"
+        >
           {{ 'login.demoPlatform' | translate }}
         </button>
-        <button pButton class="p-button-text" type="button" (click)="fillDemo('tenant')">
+        <button
+          *ngIf="mode === 'portal'"
+          pButton
+          class="p-button-text"
+          type="button"
+          (click)="fillDemo('tenant')"
+        >
           {{ 'login.demoTenant' | translate }}
         </button>
       </div>
+    </div>
+
+    <div class="portal-link" *ngIf="mode === 'platform'">
+      <a routerLink="/portal/login">{{ 'login.goPortal' | translate }}</a>
     </div>
   </section>
 </div>

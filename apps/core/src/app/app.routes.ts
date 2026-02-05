@@ -8,7 +8,11 @@ export const routes: Routes = [
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
   {
     path: 'auth',
-    children: [{ path: 'login', component: LoginComponent }]
+    children: [{ path: 'login', component: LoginComponent, data: { mode: 'platform' } }]
+  },
+  {
+    path: 'portal',
+    children: [{ path: 'login', component: LoginComponent, data: { mode: 'portal' } }]
   },
   {
     path: '',

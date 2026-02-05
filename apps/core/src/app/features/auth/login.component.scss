@@ -98,6 +98,16 @@
   gap: 0.5rem;
 }
 
+.portal-link {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.portal-link a {
+  color: var(--perfect-accent-base);
+  font-weight: 600;
+}
+
 @media (max-width: 900px) {
   .login-page {
     grid-template-columns: 1fr;
