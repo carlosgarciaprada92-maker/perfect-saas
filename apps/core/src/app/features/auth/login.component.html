@@ -1,14 +1,16 @@
 <div class="login-page">
   <section class="login-hero">
-    <div class="hero-badge">Perfect Core</div>
+    <div class="hero-badge">
+      {{ (mode === 'platform' ? 'login.platformBadge' : 'login.portalBadge') | translate }}
+    </div>
     <h1>{{ (mode === 'platform' ? 'login.platformTitle' : 'login.portalTitle') | translate }}</h1>
     <p>{{ (mode === 'platform' ? 'login.platformSubtitle' : 'login.portalSubtitle') | translate }}</p>
     <div class="hero-cards">
-      <div class="hero-card">
+      <div class="hero-card" *ngIf="mode === 'platform'">
         <h3>{{ 'login.platform' | translate }}</h3>
         <p>{{ 'login.platformDesc' | translate }}</p>
       </div>
-      <div class="hero-card">
+      <div class="hero-card" *ngIf="mode === 'portal'">
         <h3>{{ 'login.workspace' | translate }}</h3>
         <p>{{ 'login.workspaceDesc' | translate }}</p>
       </div>
@@ -29,7 +31,11 @@
     <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
       <label>
         {{ 'login.tenant' | translate }}
-        <input pInputText formControlName="tenantSlug" placeholder="demo" />
+        <input
+          pInputText
+          formControlName="tenantSlug"
+          [placeholder]="mode === 'portal' ? 'demo' : 'platform'"
+        />
       </label>
       <label>
         {{ 'login.email' | translate }}

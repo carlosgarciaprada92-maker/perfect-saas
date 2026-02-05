@@ -50,7 +50,7 @@ export class LoginComponent {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
-      tenantSlug: ['demo', [Validators.required]]
+      tenantSlug: ['', [Validators.required]]
     });
 
     this.route.data.subscribe((data) => {
@@ -137,8 +137,8 @@ export class LoginComponent {
       if (tenantControl.disabled) {
         tenantControl.enable({ emitEvent: false });
       }
-      if (!tenantControl.value) {
-        tenantControl.setValue('demo');
+      if (tenantControl.value === 'platform') {
+        tenantControl.setValue('');
       }
     }
   }
