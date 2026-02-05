@@ -12,6 +12,8 @@ public static class DbInitializer
             db.Permissions.AddRange(PermissionCatalog.ToEntities());
             await db.SaveChangesAsync(ct);
         }
+
+        await EnsureModuleCatalogAsync(db, ct);
     }
 
     public static async Task<Tenant> EnsureTenantAsync(AppDbContext db, string name, string slug, CancellationToken ct)
@@ -20,10 +22,15 @@ public static class DbInitializer
         var existing = await db.Tenants.FirstOrDefaultAsync(x => x.Slug == normalizedSlug, ct);
         if (existing != null)
         {
+            if (string.IsNullOrWhiteSpace(existing.DisplayName))
+            {
+                existing.DisplayName = existing.Name;
+                await db.SaveChangesAsync(ct);
+            }
             return existing;
         }
 
-        var tenant = new Tenant { Name = name, Slug = normalizedSlug, Plan = "Demo" };
+        var tenant = new Tenant { Name = name, DisplayName = name, Slug = normalizedSlug, Plan = "Demo" };
         db.Tenants.Add(tenant);
         db.TenantSettings.Add(new TenantSettings
         {
@@ -38,5 +45,37 @@ public static class DbInitializer
         });
         await db.SaveChangesAsync(ct);
         return tenant;
+    }
+
+    public static async Task EnsureModuleCatalogAsync(AppDbContext db, CancellationToken ct)
+    {
+        var seed = new[]
+        {
+            new ModuleCatalog
+            {
+                Name = "Peluquerías",
+                Slug = "peluquerias",
+                BaseUrl = "http://18.116.114.251",
+                Status = Perfect.Domain.Enums.ModuleStatus.Active
+            },
+            new ModuleCatalog
+            {
+                Name = "Inventarios",
+                Slug = "inventarios",
+                BaseUrl = "http://18.116.114.251",
+                Status = Perfect.Domain.Enums.ModuleStatus.Active
+            }
+        };
+
+        foreach (var module in seed)
+        {
+            var exists = await db.ModuleCatalogs.AnyAsync(x => x.Slug == module.Slug, ct);
+            if (!exists)
+            {
+                db.ModuleCatalogs.Add(module);
+            }
+        }
+
+        await db.SaveChangesAsync(ct);
     }
 }

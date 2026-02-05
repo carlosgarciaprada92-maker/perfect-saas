@@ -100,3 +100,23 @@ public interface IDemoSeedService
 {
     Task SeedDemoAsync(string? slug = null, CancellationToken ct = default);
 }
+
+public interface IPlatformService
+{
+    Task<IReadOnlyCollection<ModuleCatalogResponse>> GetModulesAsync(CancellationToken ct);
+    Task<ModuleCatalogResponse> CreateModuleAsync(ModuleCatalogRequest request, CancellationToken ct);
+    Task<ModuleCatalogResponse> UpdateModuleAsync(Guid id, ModuleCatalogRequest request, CancellationToken ct);
+    Task<bool> DeleteModuleAsync(Guid id, CancellationToken ct);
+
+    Task<IReadOnlyCollection<PlatformTenantResponse>> GetTenantsAsync(string? search, CancellationToken ct);
+    Task<PlatformTenantResponse> UpdateTenantStatusAsync(Guid id, TenantStatusUpdateRequest request, CancellationToken ct);
+
+    Task<IReadOnlyCollection<ModuleAssignmentResponse>> GetAssignmentsAsync(Guid tenantId, CancellationToken ct);
+    Task<bool> UpdateAssignmentsAsync(ModuleAssignmentUpdateRequest request, CancellationToken ct);
+}
+
+public interface IWorkspaceService
+{
+    Task<IReadOnlyCollection<WorkspaceAppResponse>> GetAppsAsync(CancellationToken ct);
+    Task<IReadOnlyCollection<WorkspaceUserResponse>> GetUsersAsync(CancellationToken ct);
+}

@@ -10,6 +10,7 @@ public class TenantConfig : IEntityTypeConfiguration<Tenant>
     {
         builder.HasIndex(x => x.Slug).IsUnique();
         builder.Property(x => x.Name).HasMaxLength(120).IsRequired();
+        builder.Property(x => x.DisplayName).HasMaxLength(160);
         builder.Property(x => x.Slug).HasMaxLength(120).IsRequired();
     }
 }
@@ -99,5 +100,29 @@ public class PaymentConfig : IEntityTypeConfiguration<Payment>
     public void Configure(EntityTypeBuilder<Payment> builder)
     {
         builder.Property(x => x.Amount).HasPrecision(18, 2);
+    }
+}
+
+public class ModuleCatalogConfig : IEntityTypeConfiguration<ModuleCatalog>
+{
+    public void Configure(EntityTypeBuilder<ModuleCatalog> builder)
+    {
+        builder.HasIndex(x => x.Slug).IsUnique();
+        builder.Property(x => x.Name).HasMaxLength(160).IsRequired();
+        builder.Property(x => x.Slug).HasMaxLength(120).IsRequired();
+        builder.Property(x => x.BaseUrl).HasMaxLength(500).IsRequired();
+        builder.Property(x => x.Icon).HasMaxLength(120);
+    }
+}
+
+public class TenantModuleConfig : IEntityTypeConfiguration<TenantModule>
+{
+    public void Configure(EntityTypeBuilder<TenantModule> builder)
+    {
+        builder.HasIndex(x => new { x.TenantId, x.ModuleId }).IsUnique();
+        builder.Property(x => x.Notes).HasMaxLength(400);
+        builder.HasOne(x => x.Module)
+            .WithMany(x => x.TenantModules)
+            .HasForeignKey(x => x.ModuleId);
     }
 }

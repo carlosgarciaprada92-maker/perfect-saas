@@ -23,6 +23,9 @@ public class AppDbContext : DbContext
     public DbSet<UserRole> UserRoles => Set<UserRole>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
+    public DbSet<ModuleCatalog> ModuleCatalogs => Set<ModuleCatalog>();
+    public DbSet<TenantModule> TenantModules => Set<TenantModule>();
+
     public DbSet<Product> Products => Set<Product>();
     public DbSet<InventoryMovement> InventoryMovements => Set<InventoryMovement>();
     public DbSet<Customer> Customers => Set<Customer>();

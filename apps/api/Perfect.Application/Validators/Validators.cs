@@ -112,3 +112,33 @@ public class UserUpdateRequestValidator : AbstractValidator<UserUpdateRequest>
         RuleFor(x => x.Email).NotEmpty().EmailAddress();
     }
 }
+
+public class ModuleCatalogRequestValidator : AbstractValidator<ModuleCatalogRequest>
+{
+    public ModuleCatalogRequestValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(160);
+        RuleFor(x => x.Slug).NotEmpty().MaximumLength(120);
+        RuleFor(x => x.BaseUrl).NotEmpty().MaximumLength(500);
+        RuleFor(x => x.Status)
+            .NotEmpty()
+            .Must(value => Enum.TryParse<Perfect.Domain.Enums.ModuleStatus>(value, true, out _));
+    }
+}
+
+public class ModuleAssignmentUpdateRequestValidator : AbstractValidator<ModuleAssignmentUpdateRequest>
+{
+    public ModuleAssignmentUpdateRequestValidator()
+    {
+        RuleFor(x => x.TenantId).NotEmpty();
+        RuleForEach(x => x.Modules).SetValidator(new ModuleAssignmentItemValidator());
+    }
+}
+
+public class ModuleAssignmentItemValidator : AbstractValidator<ModuleAssignmentItem>
+{
+    public ModuleAssignmentItemValidator()
+    {
+        RuleFor(x => x.ModuleId).NotEmpty();
+    }
+}

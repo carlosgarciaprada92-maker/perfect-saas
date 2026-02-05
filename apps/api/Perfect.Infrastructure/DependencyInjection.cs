@@ -51,6 +51,8 @@ public static class DependencyInjection
         services.AddScoped<IReportService, ReportService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IPlatformService, PlatformService>();
+        services.AddScoped<IWorkspaceService, WorkspaceService>();
         services.AddScoped<IDemoSeedService, DemoSeedService>();
         services.AddSingleton<IInvoiceStatusCalculator, InvoiceStatusCalculator>();
 

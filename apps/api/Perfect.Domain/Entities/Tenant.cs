@@ -6,6 +6,7 @@ namespace Perfect.Domain.Entities;
 public class Tenant : Entity
 {
     public string Name { get; set; } = string.Empty;
+    public string? DisplayName { get; set; }
     public string Slug { get; set; } = string.Empty;
     public TenantStatus Status { get; set; } = TenantStatus.Active;
     public string Plan { get; set; } = "Standard";

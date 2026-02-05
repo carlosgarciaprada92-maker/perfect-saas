@@ -31,10 +31,14 @@ public class DemoSeedService : IDemoSeedService
 
         var tenantSlug = string.IsNullOrWhiteSpace(slug) ? "demo" : slug.Trim().ToLowerInvariant();
         var tenant = await DbInitializer.EnsureTenantAsync(_db, "Perfect Demo", tenantSlug, ct);
+        var platformTenant = await DbInitializer.EnsureTenantAsync(_db, "Perfect Platform", "platform", ct);
+        await SeedPlatformAsync(platformTenant, ct);
+
         _tenantContext.SetTenant(tenant.Id, tenant.Slug);
 
         await SeedRolesAsync(tenant.Id, ct);
         await SeedUsersAsync(tenant.Id, ct);
+        await SeedTenantModulesAsync(tenant.Id, ct);
 
         if (!await _db.Products.AnyAsync(ct))
         {
@@ -186,68 +190,149 @@ public class DemoSeedService : IDemoSeedService
         }
     }
 
+    private async Task SeedPlatformAsync(Tenant platformTenant, CancellationToken ct)
+    {
+        _tenantContext.SetTenant(platformTenant.Id, platformTenant.Slug);
+
+        var platformRole = await EnsureRoleAsync(platformTenant.Id, "PlatformAdmin", ct, true);
+        var platformUser = await EnsureUserAsync(platformTenant.Id, "Platform Admin", "platform.admin@perfect.demo", "Platform123!", ct);
+        await EnsureUserRoleAsync(platformTenant.Id, platformUser.Id, platformRole.Id, ct);
+    }
+
     private async Task SeedRolesAsync(Guid tenantId, CancellationToken ct)
     {
-        if (await _db.Roles.AnyAsync(ct))
-        {
-            return;
-        }
-
-        var owner = new Role { TenantId = tenantId, Name = "ADMIN", IsSystemRole = true };
-        var ventas = new Role { TenantId = tenantId, Name = "Ventas", IsSystemRole = true };
-        var bodega = new Role { TenantId = tenantId, Name = "Bodega", IsSystemRole = true };
-
-        _db.Roles.AddRange(owner, ventas, bodega);
-        await _db.SaveChangesAsync(ct);
+        var owner = await EnsureRoleAsync(tenantId, "ADMIN", ct, true);
+        var tenantAdmin = await EnsureRoleAsync(tenantId, "TenantAdmin", ct, true);
+        var ventas = await EnsureRoleAsync(tenantId, "Ventas", ct, true);
+        var bodega = await EnsureRoleAsync(tenantId, "Bodega", ct, true);
 
         var perms = await _db.Permissions.ToListAsync(ct);
-
-        foreach (var permission in perms)
-        {
-            _db.RolePermissions.Add(new RolePermission { TenantId = tenantId, RoleId = owner.Id, PermissionId = permission.Id });
-        }
+        await EnsureRolePermissionsAsync(tenantId, owner.Id, perms.Select(p => p.Id), ct);
+        await EnsureRolePermissionsAsync(tenantId, tenantAdmin.Id, perms.Select(p => p.Id), ct);
 
         foreach (var code in new[] { "products.read", "products.write", "customers.read", "customers.write", "invoices.read", "invoices.write", "payments.write", "ar.read", "reports.read" })
         {
             var permission = perms.First(p => p.Code == code);
-            _db.RolePermissions.Add(new RolePermission { TenantId = tenantId, RoleId = ventas.Id, PermissionId = permission.Id });
+            await EnsureRolePermissionsAsync(tenantId, ventas.Id, new[] { permission.Id }, ct);
         }
 
         foreach (var code in new[] { "products.read", "products.write", "inventory.write" })
         {
             var permission = perms.First(p => p.Code == code);
-            _db.RolePermissions.Add(new RolePermission { TenantId = tenantId, RoleId = bodega.Id, PermissionId = permission.Id });
+            await EnsureRolePermissionsAsync(tenantId, bodega.Id, new[] { permission.Id }, ct);
+        }
+    }
+
+    private async Task SeedUsersAsync(Guid tenantId, CancellationToken ct)
+    {
+        var ownerRole = await _db.Roles.FirstAsync(r => r.Name == "ADMIN", ct);
+        var tenantAdminRole = await _db.Roles.FirstAsync(r => r.Name == "TenantAdmin", ct);
+        var ventasRole = await _db.Roles.FirstAsync(r => r.Name == "Ventas", ct);
+        var bodegaRole = await _db.Roles.FirstAsync(r => r.Name == "Bodega", ct);
+
+        var admin = await EnsureUserAsync(tenantId, "Admin Demo", "admin@perfect.demo", "Admin123!", ct);
+        var ventas = await EnsureUserAsync(tenantId, "Ventas Demo", "ventas@perfect.demo", "Ventas123!", ct);
+        var bodega = await EnsureUserAsync(tenantId, "Bodega Demo", "bodega@perfect.demo", "Bodega123!", ct);
+
+        await EnsureUserRoleAsync(tenantId, admin.Id, ownerRole.Id, ct);
+        await EnsureUserRoleAsync(tenantId, admin.Id, tenantAdminRole.Id, ct);
+        await EnsureUserRoleAsync(tenantId, ventas.Id, ventasRole.Id, ct);
+        await EnsureUserRoleAsync(tenantId, bodega.Id, bodegaRole.Id, ct);
+    }
+
+    private async Task SeedTenantModulesAsync(Guid tenantId, CancellationToken ct)
+    {
+        var modules = await _db.ModuleCatalogs.AsNoTracking()
+            .Where(x => x.Slug == "peluquerias" || x.Slug == "inventarios")
+            .ToListAsync(ct);
+        var existing = await _db.TenantModules.IgnoreQueryFilters().Where(x => x.TenantId == tenantId).ToListAsync(ct);
+
+        foreach (var module in modules)
+        {
+            var current = existing.FirstOrDefault(x => x.ModuleId == module.Id);
+            if (current != null)
+            {
+                if (!current.Enabled)
+                {
+                    current.Enabled = true;
+                    current.ActivatedAt ??= _clock.UtcNow;
+                }
+                continue;
+            }
+
+            _db.TenantModules.Add(new TenantModule
+            {
+                TenantId = tenantId,
+                ModuleId = module.Id,
+                Enabled = true,
+                ActivatedAt = _clock.UtcNow
+            });
         }
 
         await _db.SaveChangesAsync(ct);
     }
 
-    private async Task SeedUsersAsync(Guid tenantId, CancellationToken ct)
+    private async Task<Role> EnsureRoleAsync(Guid tenantId, string name, CancellationToken ct, bool isSystem)
     {
-        if (await _db.Users.AnyAsync(ct))
+        var role = await _db.Roles.FirstOrDefaultAsync(r => r.Name == name, ct);
+        if (role != null)
+        {
+            return role;
+        }
+
+        role = new Role { TenantId = tenantId, Name = name, IsSystemRole = isSystem };
+        _db.Roles.Add(role);
+        await _db.SaveChangesAsync(ct);
+        return role;
+    }
+
+    private async Task<User> EnsureUserAsync(Guid tenantId, string name, string email, string password, CancellationToken ct)
+    {
+        var normalized = email.Trim().ToLowerInvariant();
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == normalized, ct);
+        if (user != null)
+        {
+            return user;
+        }
+
+        user = new User
+        {
+            TenantId = tenantId,
+            Name = name,
+            Email = normalized,
+            PasswordHash = _passwordHasher.Hash(password),
+            IsActive = true
+        };
+        _db.Users.Add(user);
+        await _db.SaveChangesAsync(ct);
+        return user;
+    }
+
+    private async Task EnsureUserRoleAsync(Guid tenantId, Guid userId, Guid roleId, CancellationToken ct)
+    {
+        var exists = await _db.UserRoles.AnyAsync(x => x.UserId == userId && x.RoleId == roleId, ct);
+        if (exists)
         {
             return;
         }
 
-        var ownerRole = await _db.Roles.FirstAsync(r => r.Name == "ADMIN", ct);
-        var ventasRole = await _db.Roles.FirstAsync(r => r.Name == "Ventas", ct);
-        var bodegaRole = await _db.Roles.FirstAsync(r => r.Name == "Bodega", ct);
-
-        var users = new[]
-        {
-            new User { TenantId = tenantId, Name = "Admin Demo", Email = "admin@perfect.demo", PasswordHash = _passwordHasher.Hash("Admin123!"), IsActive = true },
-            new User { TenantId = tenantId, Name = "Ventas Demo", Email = "ventas@perfect.demo", PasswordHash = _passwordHasher.Hash("Ventas123!"), IsActive = true },
-            new User { TenantId = tenantId, Name = "Bodega Demo", Email = "bodega@perfect.demo", PasswordHash = _passwordHasher.Hash("Bodega123!"), IsActive = true }
-        };
-
-        _db.Users.AddRange(users);
+        _db.UserRoles.Add(new UserRole { TenantId = tenantId, UserId = userId, RoleId = roleId });
         await _db.SaveChangesAsync(ct);
+    }
 
-        _db.UserRoles.AddRange(
-            new UserRole { TenantId = tenantId, UserId = users[0].Id, RoleId = ownerRole.Id },
-            new UserRole { TenantId = tenantId, UserId = users[1].Id, RoleId = ventasRole.Id },
-            new UserRole { TenantId = tenantId, UserId = users[2].Id, RoleId = bodegaRole.Id }
-        );
+    private async Task EnsureRolePermissionsAsync(Guid tenantId, Guid roleId, IEnumerable<Guid> permissionIds, CancellationToken ct)
+    {
+        var existing = await _db.RolePermissions.Where(x => x.RoleId == roleId).Select(x => x.PermissionId).ToListAsync(ct);
+        var missing = permissionIds.Where(id => !existing.Contains(id)).ToList();
+        if (missing.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var permissionId in missing)
+        {
+            _db.RolePermissions.Add(new RolePermission { TenantId = tenantId, RoleId = roleId, PermissionId = permissionId });
+        }
 
         await _db.SaveChangesAsync(ct);
     }

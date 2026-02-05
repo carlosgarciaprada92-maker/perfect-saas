@@ -13,12 +13,14 @@ public class AuthController : ApiControllerBase
     private readonly IAuthService _authService;
     private readonly IDemoSeedService _demoSeedService;
     private readonly IWebHostEnvironment _environment;
+    private readonly IConfiguration _configuration;
 
-    public AuthController(IAuthService authService, IDemoSeedService demoSeedService, IWebHostEnvironment environment)
+    public AuthController(IAuthService authService, IDemoSeedService demoSeedService, IWebHostEnvironment environment, IConfiguration configuration)
     {
         _authService = authService;
         _demoSeedService = demoSeedService;
         _environment = environment;
+        _configuration = configuration;
     }
 
     [HttpPost("login")]
@@ -51,7 +53,8 @@ public class AuthController : ApiControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> SeedDemo([FromQuery] string? slug, CancellationToken ct)
     {
-        if (!_environment.IsDevelopment())
+        var allowSeed = _configuration.GetValue("Platform:AllowDemoSeed", false);
+        if (!_environment.IsDevelopment() && !allowSeed)
         {
             return NotFound();
         }

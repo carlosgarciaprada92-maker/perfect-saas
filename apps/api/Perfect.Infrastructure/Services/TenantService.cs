@@ -31,6 +31,7 @@ public class TenantService : ITenantService
         var tenant = new Tenant
         {
             Name = request.Name,
+            DisplayName = request.Name,
             Slug = slug,
             Status = TenantStatus.Active,
             Plan = request.Plan,

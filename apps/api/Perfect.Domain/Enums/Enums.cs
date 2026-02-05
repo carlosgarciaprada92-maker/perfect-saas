@@ -26,3 +26,10 @@ public enum TenantStatus
     Active = 1,
     Suspended = 2
 }
+
+public enum ModuleStatus
+{
+    Active = 1,
+    Beta = 2,
+    Disabled = 3
+}
