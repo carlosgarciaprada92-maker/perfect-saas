@@ -22,6 +22,10 @@ variable "api_image" {
   type = string
 }
 
+variable "core_image" {
+  type = string
+}
+
 variable "db_image" {
   type    = string
   default = "postgres:16-alpine"
@@ -50,6 +54,11 @@ variable "api_port" {
 variable "web_port" {
   type    = number
   default = 80
+}
+
+variable "core_port" {
+  type    = number
+  default = 8081
 }
 
 variable "assign_public_ip" {

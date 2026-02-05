@@ -123,6 +123,32 @@ resource "aws_ecs_task_definition" "app" {
       }
     },
     {
+      name      = "core"
+      image     = var.core_image
+      essential = true
+      dependsOn = [
+        {
+          containerName = "api"
+          condition     = "START"
+        }
+      ]
+      portMappings = [
+        {
+          containerPort = var.core_port
+          hostPort      = var.core_port
+          protocol      = "tcp"
+        }
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.app.name
+          awslogs-region        = var.region
+          awslogs-stream-prefix = "core"
+        }
+      }
+    },
+    {
       name      = "web"
       image     = var.web_image
       essential = true

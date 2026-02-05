@@ -49,3 +49,25 @@ jobs:
           docker build -f apps/api/Perfect.Api/Dockerfile -t "$REGISTRY/$REPOSITORY:$IMAGE_TAG" apps/api
           docker push "$REGISTRY/$REPOSITORY:$IMAGE_TAG"
           echo "Image pushed: $REGISTRY/$REPOSITORY:$IMAGE_TAG"
+
+      - name: Build and push Core image (optional)
+        if: ${{ secrets.ECR_REPOSITORY_CORE != '' }}
+        env:
+          REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          REPOSITORY: ${{ secrets.ECR_REPOSITORY_CORE }}
+          IMAGE_TAG: ${{ github.event.inputs.image_tag }}
+        run: |
+          docker build -f apps/core/Dockerfile -t "$REGISTRY/$REPOSITORY:$IMAGE_TAG" apps/core
+          docker push "$REGISTRY/$REPOSITORY:$IMAGE_TAG"
+          echo "Image pushed: $REGISTRY/$REPOSITORY:$IMAGE_TAG"
+
+      - name: Build and push Web image (optional)
+        if: ${{ secrets.ECR_REPOSITORY_WEB != '' }}
+        env:
+          REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          REPOSITORY: ${{ secrets.ECR_REPOSITORY_WEB }}
+          IMAGE_TAG: ${{ github.event.inputs.image_tag }}
+        run: |
+          docker build -f apps/web/Dockerfile -t "$REGISTRY/$REPOSITORY:$IMAGE_TAG" apps/web
+          docker push "$REGISTRY/$REPOSITORY:$IMAGE_TAG"
+          echo "Image pushed: $REGISTRY/$REPOSITORY:$IMAGE_TAG"

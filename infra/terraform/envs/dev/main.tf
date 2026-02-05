@@ -27,6 +27,13 @@ module "ecr_web" {
   tags            = local.common_tags
 }
 
+module "ecr_core" {
+  source          = "../../modules/ecr"
+  name_prefix     = var.name_prefix
+  repository_name = "core"
+  tags            = local.common_tags
+}
+
 module "ecs" {
   source             = "../../modules/ecs"
   name_prefix        = var.name_prefix
@@ -35,6 +42,7 @@ module "ecs" {
   security_group_ids = [module.network.ecs_security_group_id]
   web_image          = "${module.ecr_web.repository_url}:${var.image_tag}"
   api_image          = "${module.ecr_api.repository_url}:${var.image_tag}"
+  core_image         = "${module.ecr_core.repository_url}:${var.image_tag}"
   db_password        = var.db_password
   desired_count      = 1
   cpu                = 1024
@@ -52,6 +60,8 @@ module "ecs" {
     Tenant__SlugHeaderName     = "X-Tenant-Slug"
     Cors__AllowedOrigins       = var.cors_allowed_origins
     Platform__BootstrapKey     = ""
+    Platform__AllowDemoSeed    = "true"
+    Swagger__Enabled           = "true"
   }
   tags = local.common_tags
 }

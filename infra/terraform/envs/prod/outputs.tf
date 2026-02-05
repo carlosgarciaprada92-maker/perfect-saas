@@ -6,6 +6,10 @@ output "ecr_web_repository_url" {
   value = module.ecr_web.repository_url
 }
 
+output "ecr_core_repository_url" {
+  value = module.ecr_core.repository_url
+}
+
 output "ecs_cluster_name" {
   value = module.ecs.cluster_name
 }
