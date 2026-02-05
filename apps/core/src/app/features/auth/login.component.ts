@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { NgIf, AsyncPipe } from '@angular/common';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -9,13 +9,17 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { MessageService } from 'primeng/api';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
+import { LanguageService } from '../../core/services/language.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     NgIf,
+    AsyncPipe,
     ReactiveFormsModule,
     TranslateModule,
     InputTextModule,
@@ -30,6 +34,7 @@ import { AuthService } from '../../core/services/auth.service';
 export class LoginComponent {
   readonly form: FormGroup;
   mode: 'platform' | 'portal' = 'platform';
+  readonly currentLangLabel$: Observable<string>;
 
   loading = false;
 
@@ -39,7 +44,8 @@ export class LoginComponent {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly messages: MessageService,
-    public readonly translate: TranslateService
+    public readonly translate: TranslateService,
+    public readonly language: LanguageService
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -51,6 +57,8 @@ export class LoginComponent {
       const mode = data['mode'] === 'portal' ? 'portal' : 'platform';
       this.applyMode(mode);
     });
+
+    this.currentLangLabel$ = this.language.currentLang$.pipe(map((lang) => lang.toUpperCase()));
   }
 
   submit(): void {
@@ -94,9 +102,7 @@ export class LoginComponent {
   }
 
   switchLanguage(): void {
-    const next = this.translate.currentLang === 'es' ? 'en' : 'es';
-    this.translate.use(next);
-    localStorage.setItem('core_lang', next);
+    this.language.toggle();
   }
 
   fillDemo(type: 'platform' | 'tenant'): void {

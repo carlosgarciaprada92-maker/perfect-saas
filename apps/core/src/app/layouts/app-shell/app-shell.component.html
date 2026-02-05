@@ -56,7 +56,7 @@
           styleClass="tenant-select"
         ></p-select>
         <button pButton class="p-button-outlined" (click)="switchLanguage()">
-          {{ (translate.currentLang === 'es' ? 'EN' : 'ES') }}
+          {{ currentLangLabel$ | async }}
         </button>
         <a
           *ngIf="isPlatformAdmin"

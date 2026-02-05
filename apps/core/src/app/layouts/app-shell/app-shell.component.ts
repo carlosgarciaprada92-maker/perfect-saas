@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgIf, NgClass } from '@angular/common';
+import { NgIf, NgClass, AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -7,9 +7,12 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 import { MatIconModule } from '@angular/material/icon';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { PlatformService } from '../../core/services/platform.service';
 import { TenantSummary } from '../../core/models/platform.model';
+import { LanguageService } from '../../core/services/language.service';
 
 @Component({
   selector: 'app-shell',
@@ -17,6 +20,7 @@ import { TenantSummary } from '../../core/models/platform.model';
   imports: [
     NgIf,
     NgClass,
+    AsyncPipe,
     FormsModule,
     RouterModule,
     TranslateModule,
@@ -33,13 +37,17 @@ export class AppShellComponent implements OnInit {
   collapsed = false;
   tenantOptions: { label: string; value: string }[] = [];
   selectedTenant: string | null = null;
+  readonly currentLangLabel$: Observable<string>;
 
   constructor(
     private readonly auth: AuthService,
     private readonly platform: PlatformService,
     private readonly router: Router,
-    public readonly translate: TranslateService
-  ) {}
+    public readonly translate: TranslateService,
+    public readonly language: LanguageService
+  ) {
+    this.currentLangLabel$ = this.language.currentLang$.pipe(map((lang) => lang.toUpperCase()));
+  }
 
   ngOnInit(): void {
     if (this.isPlatformAdmin) {
@@ -84,9 +92,7 @@ export class AppShellComponent implements OnInit {
   }
 
   switchLanguage(): void {
-    const next = this.translate.currentLang === 'es' ? 'en' : 'es';
-    this.translate.use(next);
-    localStorage.setItem('core_lang', next);
+    this.language.toggle();
   }
 
   logout(): void {

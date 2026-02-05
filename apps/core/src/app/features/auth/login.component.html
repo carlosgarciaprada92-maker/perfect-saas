@@ -22,7 +22,7 @@
         <p>{{ (mode === 'platform' ? 'login.platformAccess' : 'login.portalAccess') | translate }}</p>
       </div>
       <button pButton class="p-button-outlined" (click)="switchLanguage()">
-        {{ translate.currentLang === 'es' ? 'EN' : 'ES' }}
+        {{ currentLangLabel$ | async }}
       </button>
     </div>
 

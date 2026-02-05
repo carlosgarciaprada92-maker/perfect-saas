@@ -1,4 +1,11 @@
-import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners, isDevMode } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+  isDevMode,
+  inject
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -10,6 +17,7 @@ import { providePrimeNG } from 'primeng/config';
 import { PerfectPreset } from './core/theme/perfect-preset';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { FallbackMissingTranslationHandler } from './core/i18n/fallback-missing-translation.handler';
+import { LanguageService } from './core/services/language.service';
 
 import { routes } from './app.routes';
 
@@ -39,6 +47,10 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' }),
+    provideAppInitializer(() => {
+      const language = inject(LanguageService);
+      language.init();
+    }),
     MessageService,
     ConfirmationService,
     provideServiceWorker('ngsw-worker.js', {
