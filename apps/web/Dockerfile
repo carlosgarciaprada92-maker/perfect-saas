@@ -11,8 +11,8 @@ RUN npm run build -- --base-href /peluquerias/ --deploy-url /peluquerias/ --outp
 FROM nginx:1.27-alpine AS runtime
 
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/dist/inventarios /usr/share/nginx/html/inventarios
-COPY --from=builder /app/dist/peluquerias /usr/share/nginx/html/peluquerias
+COPY --from=builder /app/dist/inventarios/browser /usr/share/nginx/html/inventarios
+COPY --from=builder /app/dist/peluquerias/browser /usr/share/nginx/html/peluquerias
 
 EXPOSE 80
 
