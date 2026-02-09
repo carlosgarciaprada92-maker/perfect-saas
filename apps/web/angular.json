@@ -57,6 +57,50 @@
                                                                                                                                             }
                                                                                                                                         ]
                                                                                                                },
+                                                                                               "inventarios":  {
+                                                                                                                   "budgets":  [
+                                                                                                                                   {
+                                                                                                                                       "type":  "initial",
+                                                                                                                                       "maximumWarning":  "2MB",
+                                                                                                                                       "maximumError":  "3MB"
+                                                                                                                                   },
+                                                                                                                                   {
+                                                                                                                                       "type":  "anyComponentStyle",
+                                                                                                                                       "maximumWarning":  "4kB",
+                                                                                                                                       "maximumError":  "8kB"
+                                                                                                                                   }
+                                                                                                                               ],
+                                                                                                                   "outputHashing":  "all",
+                                                                                                                   "serviceWorker":  "ngsw-config.json",
+                                                                                                                   "fileReplacements":  [
+                                                                                                                                            {
+                                                                                                                                                "with":  "src/environments/environment.inventarios.ts",
+                                                                                                                                                "replace":  "src/environments/environment.ts"
+                                                                                                                                            }
+                                                                                                                                        ]
+                                                                                                               },
+                                                                                               "peluquerias":  {
+                                                                                                                  "budgets":  [
+                                                                                                                                  {
+                                                                                                                                      "type":  "initial",
+                                                                                                                                      "maximumWarning":  "2MB",
+                                                                                                                                      "maximumError":  "3MB"
+                                                                                                                                  },
+                                                                                                                                  {
+                                                                                                                                      "type":  "anyComponentStyle",
+                                                                                                                                      "maximumWarning":  "4kB",
+                                                                                                                                      "maximumError":  "8kB"
+                                                                                                                                  }
+                                                                                                                              ],
+                                                                                                                  "outputHashing":  "all",
+                                                                                                                  "serviceWorker":  "ngsw-config.json",
+                                                                                                                  "fileReplacements":  [
+                                                                                                                                           {
+                                                                                                                                               "with":  "src/environments/environment.peluquerias.ts",
+                                                                                                                                               "replace":  "src/environments/environment.ts"
+                                                                                                                                           }
+                                                                                                                                       ]
+                                                                                                              },
                                                                                                 "development":  {
                                                                                                                     "optimization":  false,
                                                                                                                     "extractLicenses":  false,

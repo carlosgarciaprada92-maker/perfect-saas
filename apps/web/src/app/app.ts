@@ -7,6 +7,7 @@ import { ConnectivityService } from './core/services/connectivity.service';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TranslateModule } from '@ngx-translate/core';
+import { environment } from './environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -25,5 +26,6 @@ export class App {
     this.translate.setDefaultLang('es');
     this.translate.use(savedLang);
     this.online$ = this.connectivity.online$;
+    document.title = `Perfect ${environment.appName}`;
   }
 }

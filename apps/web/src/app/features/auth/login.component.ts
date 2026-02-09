@@ -13,6 +13,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../core/services/auth.service';
 import { Usuario } from '../../core/models/usuario.model';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -39,6 +40,7 @@ export class LoginComponent {
     { label: 'Ventas', value: 'ventas@perfect.demo', roleLabel: 'Ventas' },
     { label: 'Bodega', value: 'bodega@perfect.demo', roleLabel: 'Bodega' }
   ];
+  readonly appName = environment.appName;
 
   readonly form;
   selectedAccount = this.demoAccounts[0].value;

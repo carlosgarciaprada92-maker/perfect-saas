@@ -5,8 +5,8 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build -- --base-href /inventarios/ --deploy-url /inventarios/ --output-path /app/dist/inventarios
-RUN npm run build -- --base-href /peluquerias/ --deploy-url /peluquerias/ --output-path /app/dist/peluquerias
+RUN npm run build -- --configuration inventarios --base-href /inventarios/ --deploy-url /inventarios/ --output-path /app/dist/inventarios
+RUN npm run build -- --configuration peluquerias --base-href /peluquerias/ --deploy-url /peluquerias/ --output-path /app/dist/peluquerias
 
 FROM nginx:1.27-alpine AS runtime
 

@@ -27,7 +27,7 @@ export const appConfig: ApplicationConfig = {
       }
     }),
     importProvidersFrom(TranslateModule.forRoot({ defaultLanguage: 'es' })),
-    provideTranslateHttpLoader({ prefix: '/i18n/', suffix: '.json' }),
+    provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' }),
     MessageService,
     ConfirmationService,
     provideServiceWorker('ngsw-worker.js', {

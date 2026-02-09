@@ -4,7 +4,7 @@
     <div class="logo">
       <div class="logo-brand">
         <span class="pi pi-box"></span>
-        <span *ngIf="!collapsed()">Perfect</span>
+        <span *ngIf="!collapsed()">Perfect {{ appName }}</span>
       </div>
       <button
         *ngIf="isMobile()"
