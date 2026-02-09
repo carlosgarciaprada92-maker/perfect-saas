@@ -64,13 +64,13 @@ npm run start
 - `GET /api/v1/workspace/users` (stub)
 
 ## URLs DEV (actualizadas)
-- `http://3.148.169.222/`
-- `http://3.148.169.222/core/auth/login` (Platform Console)
-- `http://3.148.169.222/core/portal/login` (Customer Portal)
-- `http://3.148.169.222/core/workspace`
-- `http://3.148.169.222/core/platform/tenants`
-- `http://3.148.169.222/api/health`
-- `http://3.148.169.222/swagger/`
+- Base estable (API Gateway): `https://l0sbs7vxsd.execute-api.us-east-2.amazonaws.com`
+- Platform Console: `https://l0sbs7vxsd.execute-api.us-east-2.amazonaws.com/core/auth/login`
+- Customer Portal: `https://l0sbs7vxsd.execute-api.us-east-2.amazonaws.com/core/portal/login`
+- Workspace: `https://l0sbs7vxsd.execute-api.us-east-2.amazonaws.com/core/workspace`
+- Platform Tenants: `https://l0sbs7vxsd.execute-api.us-east-2.amazonaws.com/core/platform/tenants`
+- API Health: `https://l0sbs7vxsd.execute-api.us-east-2.amazonaws.com/api/health`
+- Swagger: `https://l0sbs7vxsd.execute-api.us-east-2.amazonaws.com/swagger/`
 
 ## Credenciales demo
 - PlatformAdmin: `platform.admin@perfect.demo` / `Platform123!` (tenant fijo: `platform`)
@@ -96,8 +96,8 @@ npm run start
 10. Botón “Abrir” con URL válida → abre nueva pestaña.
 
 ## Notas
-- BaseUrl de módulos vive en `ModuleCatalog` y se puede ajustar desde Platform Admin.
-- En DEV la IP pública puede cambiar tras redeploy; actualizar `CORE_DEFAULT_MODULE_BASEURL` o editar módulos desde `/core/platform/modules`.
+- LaunchUrl de módulos vive en `ModuleCatalog` y se puede ajustar desde Platform Admin.
+- En DEV la IP pública puede cambiar tras redeploy; ejecutar `scripts/update-dev-endpoint.ps1` para actualizar `app_public_ip` y mantener el endpoint estable del API Gateway.
 - SSO/OIDC pendiente para fase siguiente.
 
 
