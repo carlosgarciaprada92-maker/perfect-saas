@@ -70,6 +70,7 @@
                                                                                                                                        "maximumError":  "8kB"
                                                                                                                                    }
                                                                                                                                ],
+                                                                                                                   "index":  "src/index.inventarios.html",
                                                                                                                    "outputHashing":  "all",
                                                                                                                    "serviceWorker":  "ngsw-config.json",
                                                                                                                    "fileReplacements":  [
@@ -92,6 +93,7 @@
                                                                                                                                       "maximumError":  "8kB"
                                                                                                                                   }
                                                                                                                               ],
+                                                                                                                  "index":  "src/index.peluquerias.html",
                                                                                                                   "outputHashing":  "all",
                                                                                                                   "serviceWorker":  "ngsw-config.json",
                                                                                                                   "fileReplacements":  [
