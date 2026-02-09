@@ -58,7 +58,9 @@ export class LoginComponent {
       this.applyMode(mode);
     });
 
-    this.currentLangLabel$ = this.language.currentLang$.pipe(map((lang) => lang.toUpperCase()));
+    this.currentLangLabel$ = this.language.currentLang$.pipe(
+      map((lang) => (lang === 'es' ? 'EN' : 'ES'))
+    );
   }
 
   submit(): void {

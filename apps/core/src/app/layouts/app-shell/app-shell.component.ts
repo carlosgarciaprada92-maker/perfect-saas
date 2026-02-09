@@ -46,7 +46,9 @@ export class AppShellComponent implements OnInit {
     public readonly translate: TranslateService,
     public readonly language: LanguageService
   ) {
-    this.currentLangLabel$ = this.language.currentLang$.pipe(map((lang) => lang.toUpperCase()));
+    this.currentLangLabel$ = this.language.currentLang$.pipe(
+      map((lang) => (lang === 'es' ? 'EN' : 'ES'))
+    );
   }
 
   ngOnInit(): void {
