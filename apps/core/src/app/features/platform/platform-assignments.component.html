@@ -25,7 +25,7 @@
       <small>{{ module.slug }}</small>
     </div>
     <div class="assignment-url">
-      <span>{{ module.baseUrl || ('platform.modules.emptyUrl' | translate) }}</span>
+      <span>{{ module.launchUrl || module.baseUrl || ('platform.modules.emptyUrl' | translate) }}</span>
       <button pButton class="p-button-text p-button-sm" type="button" (click)="copyUrl(module)">
         <i class="pi pi-copy"></i>
         {{ 'platform.assignments.copyUrl' | translate }}

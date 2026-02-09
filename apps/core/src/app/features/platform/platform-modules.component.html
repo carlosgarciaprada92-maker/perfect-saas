@@ -13,7 +13,7 @@
     <tr>
       <th>{{ 'platform.modules.name' | translate }}</th>
       <th>{{ 'platform.modules.slug' | translate }}</th>
-      <th>{{ 'platform.modules.baseUrl' | translate }}</th>
+      <th>{{ 'platform.modules.launchUrl' | translate }}</th>
       <th>{{ 'platform.modules.status' | translate }}</th>
       <th>{{ 'platform.modules.action' | translate }}</th>
     </tr>
@@ -24,7 +24,7 @@
         <strong>{{ module.name }}</strong>
       </td>
       <td>{{ module.slug }}</td>
-      <td>{{ module.baseUrl || ('platform.modules.emptyUrl' | translate) }}</td>
+      <td>{{ module.launchUrl || module.baseUrl || ('platform.modules.emptyUrl' | translate) }}</td>
       <td><p-tag [value]="module.status" severity="info"></p-tag></td>
       <td class="actions">
         <button pButton class="p-button-text" icon="pi pi-pencil" (click)="openEdit(module)"></button>
@@ -49,8 +49,8 @@
       <input pInputText formControlName="slug" />
     </label>
     <label>
-      {{ 'platform.modules.baseUrl' | translate }}
-      <input pInputText formControlName="baseUrl" />
+      {{ 'platform.modules.launchUrl' | translate }}
+      <input pInputText formControlName="launchUrl" />
     </label>
     <label>
       {{ 'platform.modules.status' | translate }}

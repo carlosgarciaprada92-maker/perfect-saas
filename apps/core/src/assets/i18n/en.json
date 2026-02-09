@@ -80,6 +80,7 @@
                                      "name":  "Name",
                                      "slug":  "Slug",
                                      "baseUrl":  "Base URL",
+                                     "launchUrl":  "Launch URL",
                                      "status":  "Status",
                                      "icon":  "Icon",
                                      "action":  "Action",

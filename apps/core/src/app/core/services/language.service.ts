@@ -10,15 +10,22 @@ export class LanguageService {
   private readonly currentLangSubject = new BehaviorSubject<AppLanguage>('es');
   readonly currentLang$ = this.currentLangSubject.asObservable();
 
-  constructor(private readonly translate: TranslateService) {}
+  constructor(private readonly translate: TranslateService) {
+    this.translate.onLangChange.subscribe((event) => {
+      const lang = (event.lang === 'en' ? 'en' : 'es') as AppLanguage;
+      this.currentLangSubject.next(lang);
+    });
+  }
 
   init(): void {
     const saved = localStorage.getItem(this.storageKey);
     const initial = saved === 'en' ? 'en' : 'es';
     this.translate.addLangs(['es', 'en']);
     this.translate.setDefaultLang('es');
-    this.translate.use(initial);
-    this.currentLangSubject.next(initial);
+    this.translate.use(initial).subscribe(() => {
+      this.currentLangSubject.next(initial);
+    });
+    localStorage.setItem(this.storageKey, initial);
   }
 
   getCurrentLang(): AppLanguage {
@@ -29,9 +36,10 @@ export class LanguageService {
     if (lang === this.currentLangSubject.value) {
       return;
     }
-    this.translate.use(lang);
+    this.translate.use(lang).subscribe(() => {
+      this.currentLangSubject.next(lang);
+    });
     localStorage.setItem(this.storageKey, lang);
-    this.currentLangSubject.next(lang);
   }
 
   toggle(): void {

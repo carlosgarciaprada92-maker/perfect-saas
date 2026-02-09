@@ -53,7 +53,7 @@ export class PlatformModulesComponent implements OnInit {
     this.form = this.fb.group({
       name: ['', [Validators.required]],
       slug: ['', [Validators.required]],
-      baseUrl: ['', [Validators.required]],
+      launchUrl: ['', [Validators.required]],
       status: ['Active' as ModuleStatus, [Validators.required]],
       icon: ['']
     });
@@ -76,20 +76,21 @@ export class PlatformModulesComponent implements OnInit {
               summary: this.translate.instant('common.error'),
               detail: this.translate.instant('platform.modules.loadError')
             });
+            this.refreshView();
           });
           return of([] as ModuleCatalog[]);
         }),
         finalize(() => {
           this.zone.run(() => {
             this.loading = false;
-            this.cdr.markForCheck();
+            this.refreshView();
           });
         })
       )
       .subscribe((modules) => {
         this.zone.run(() => {
           this.modules = [...modules];
-          this.cdr.markForCheck();
+          this.refreshView();
         });
       });
   }
@@ -105,7 +106,7 @@ export class PlatformModulesComponent implements OnInit {
     this.form.reset({
       name: module.name,
       slug: module.slug,
-      baseUrl: module.baseUrl,
+      launchUrl: module.launchUrl || module.baseUrl,
       status: module.status,
       icon: module.icon ?? ''
     });
@@ -118,7 +119,11 @@ export class PlatformModulesComponent implements OnInit {
       return;
     }
 
-    const payload = this.form.getRawValue() as ModuleCatalogRequest;
+    const raw = this.form.getRawValue() as ModuleCatalogRequest;
+    const payload: ModuleCatalogRequest = {
+      ...raw,
+      baseUrl: raw.launchUrl
+    };
     const request$ = this.editing
       ? this.platform.updateModule(this.editing.id, payload)
       : this.platform.createModule(payload);
@@ -131,5 +136,10 @@ export class PlatformModulesComponent implements OnInit {
 
   remove(module: ModuleCatalog): void {
     this.platform.deleteModule(module.id).subscribe(() => this.loadModules());
+  }
+
+  private refreshView(): void {
+    this.cdr.detectChanges();
+    requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
   }
 }

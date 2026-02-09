@@ -80,6 +80,7 @@
                                      "name":  "Nombre",
                                      "slug":  "Slug",
                                      "baseUrl":  "URL base",
+                                     "launchUrl":  "URL de acceso",
                                      "status":  "Estado",
                                      "icon":  "Icono",
                                      "action":  "Acción",

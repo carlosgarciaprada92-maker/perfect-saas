@@ -54,20 +54,21 @@ export class PlatformTenantsComponent implements OnInit {
               summary: this.translate.instant('common.error'),
               detail: this.translate.instant('platform.tenants.loadError')
             });
+            this.refreshView();
           });
           return of([] as TenantSummary[]);
         }),
         finalize(() => {
           this.zone.run(() => {
             this.loading = false;
-            this.cdr.markForCheck();
+            this.refreshView();
           });
         })
       )
       .subscribe((tenants) => {
         this.zone.run(() => {
           this.tenants = [...tenants];
-          this.cdr.markForCheck();
+          this.refreshView();
         });
       });
   }
@@ -78,7 +79,12 @@ export class PlatformTenantsComponent implements OnInit {
       this.tenants = this.tenants.map((item) =>
         item.id === tenant.id ? { ...item, status: updated.status } : item
       );
-      this.cdr.markForCheck();
+      this.refreshView();
     });
+  }
+
+  private refreshView(): void {
+    this.cdr.detectChanges();
+    requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
   }
 }

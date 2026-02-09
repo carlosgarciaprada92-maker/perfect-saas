@@ -5,6 +5,7 @@ export interface WorkspaceApp {
   name: string;
   slug: string;
   baseUrl: string;
+  launchUrl: string;
   status: ModuleStatus;
   enabled: boolean;
 }

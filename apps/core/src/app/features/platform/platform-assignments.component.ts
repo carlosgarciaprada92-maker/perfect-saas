@@ -43,6 +43,7 @@ export class PlatformAssignmentsComponent implements OnInit {
               summary: this.translate.instant('common.error'),
               detail: this.translate.instant('platform.assignments.loadTenantsError')
             });
+            this.refreshView();
           });
           return of([] as TenantSummary[]);
         }),
@@ -51,7 +52,7 @@ export class PlatformAssignmentsComponent implements OnInit {
             if (!this.selectedTenantId) {
               this.loading = false;
             }
-            this.cdr.markForCheck();
+            this.refreshView();
           });
         })
       )
@@ -62,6 +63,7 @@ export class PlatformAssignmentsComponent implements OnInit {
             this.selectedTenantId = tenants[0].id;
             this.loadAssignments();
           }
+          this.refreshView();
         });
       });
   }
@@ -82,20 +84,21 @@ export class PlatformAssignmentsComponent implements OnInit {
               summary: this.translate.instant('common.error'),
               detail: this.translate.instant('platform.assignments.loadError')
             });
+            this.refreshView();
           });
           return of([] as ModuleAssignment[]);
         }),
         finalize(() => {
           this.zone.run(() => {
             this.loading = false;
-            this.cdr.markForCheck();
+            this.refreshView();
           });
         })
       )
       .subscribe((assignments) => {
         this.zone.run(() => {
           this.assignments = [...assignments];
-          this.cdr.markForCheck();
+          this.refreshView();
         });
       });
   }
@@ -116,7 +119,7 @@ export class PlatformAssignmentsComponent implements OnInit {
   }
 
   copyUrl(module: ModuleAssignment): void {
-    const url = (module.baseUrl ?? '').trim();
+    const url = (module.launchUrl ?? module.baseUrl ?? '').trim();
     if (!url) {
       this.messages.add({
         severity: 'warn',
@@ -142,5 +145,10 @@ export class PlatformAssignmentsComponent implements OnInit {
           detail: this.translate.instant('platform.assignments.copyError')
         });
       });
+  }
+
+  private refreshView(): void {
+    this.cdr.detectChanges();
+    requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
   }
 }

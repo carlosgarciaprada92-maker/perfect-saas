@@ -5,6 +5,7 @@ export interface ModuleCatalog {
   name: string;
   slug: string;
   baseUrl: string;
+  launchUrl: string;
   icon?: string | null;
   status: ModuleStatus;
   createdAt: string;
@@ -13,7 +14,8 @@ export interface ModuleCatalog {
 export interface ModuleCatalogRequest {
   name: string;
   slug: string;
-  baseUrl: string;
+  baseUrl?: string | null;
+  launchUrl: string;
   status: ModuleStatus;
   icon?: string | null;
 }
@@ -39,6 +41,7 @@ export interface ModuleAssignment {
   name: string;
   slug: string;
   baseUrl: string;
+  launchUrl: string;
   status: ModuleStatus;
   enabled: boolean;
   activatedAt?: string | null;

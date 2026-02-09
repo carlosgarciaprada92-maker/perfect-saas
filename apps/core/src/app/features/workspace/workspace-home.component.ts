@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CardModule } from 'primeng/card';
@@ -22,24 +22,32 @@ export class WorkspaceHomeComponent implements OnInit {
   constructor(
     private readonly workspace: WorkspaceService,
     private readonly messages: MessageService,
-    private readonly translate: TranslateService
+    private readonly translate: TranslateService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly zone: NgZone
   ) {}
 
   ngOnInit(): void {
     this.workspace.listApps().subscribe({
       next: (apps) => {
-        this.apps = apps;
-        this.loading = false;
+        this.zone.run(() => {
+          this.apps = [...apps];
+          this.loading = false;
+          this.refreshView();
+        });
       },
       error: () => {
-        this.loading = false;
+        this.zone.run(() => {
+          this.loading = false;
+          this.refreshView();
+        });
       }
     });
   }
 
   async openApp(app: WorkspaceApp): Promise<void> {
-    const baseUrl = (app.baseUrl ?? '').trim();
-    if (!baseUrl) {
+    const launchUrl = (app.launchUrl ?? app.baseUrl ?? '').trim();
+    if (!launchUrl) {
       this.messages.add({
         severity: 'warn',
         summary: this.translate.instant('common.notice'),
@@ -49,7 +57,7 @@ export class WorkspaceHomeComponent implements OnInit {
     }
 
     try {
-      new URL(baseUrl);
+      new URL(launchUrl);
     } catch {
       this.messages.add({
         severity: 'error',
@@ -59,7 +67,7 @@ export class WorkspaceHomeComponent implements OnInit {
       return;
     }
 
-    const reachable = await this.checkUrl(baseUrl);
+    const reachable = await this.checkUrl(launchUrl);
     if (!reachable) {
       this.messages.add({
         severity: 'error',
@@ -69,7 +77,7 @@ export class WorkspaceHomeComponent implements OnInit {
       return;
     }
 
-    window.open(baseUrl, '_blank', 'noopener');
+    window.open(launchUrl, '_blank', 'noopener');
   }
 
   private async checkUrl(url: string): Promise<boolean> {
@@ -83,5 +91,10 @@ export class WorkspaceHomeComponent implements OnInit {
     } finally {
       clearTimeout(timeout);
     }
+  }
+
+  private refreshView(): void {
+    this.cdr.detectChanges();
+    requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
   }
 }
