@@ -111,6 +111,7 @@ public class ModuleCatalogConfig : IEntityTypeConfiguration<ModuleCatalog>
         builder.Property(x => x.Name).HasMaxLength(160).IsRequired();
         builder.Property(x => x.Slug).HasMaxLength(120).IsRequired();
         builder.Property(x => x.BaseUrl).HasMaxLength(500).IsRequired();
+        builder.Property(x => x.LaunchUrl).HasMaxLength(700).IsRequired();
         builder.Property(x => x.Icon).HasMaxLength(120);
     }
 }

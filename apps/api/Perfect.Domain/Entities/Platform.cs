@@ -8,6 +8,7 @@ public class ModuleCatalog : Entity
     public string Name { get; set; } = string.Empty;
     public string Slug { get; set; } = string.Empty;
     public string BaseUrl { get; set; } = string.Empty;
+    public string LaunchUrl { get; set; } = string.Empty;
     public string? Icon { get; set; }
     public ModuleStatus Status { get; set; } = ModuleStatus.Active;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

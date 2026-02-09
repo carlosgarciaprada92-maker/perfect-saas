@@ -119,10 +119,28 @@ public class ModuleCatalogRequestValidator : AbstractValidator<ModuleCatalogRequ
     {
         RuleFor(x => x.Name).NotEmpty().MaximumLength(160);
         RuleFor(x => x.Slug).NotEmpty().MaximumLength(120);
-        RuleFor(x => x.BaseUrl).MaximumLength(500);
+        RuleFor(x => x.BaseUrl)
+            .MaximumLength(500)
+            .Must(IsValidHttpUrl)
+            .When(x => !string.IsNullOrWhiteSpace(x.BaseUrl));
+        RuleFor(x => x.LaunchUrl)
+            .NotEmpty()
+            .MaximumLength(700)
+            .Must(IsValidHttpUrl);
         RuleFor(x => x.Status)
             .NotEmpty()
             .Must(value => Enum.TryParse<Perfect.Domain.Enums.ModuleStatus>(value, true, out _));
+    }
+
+    private static bool IsValidHttpUrl(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        return Uri.TryCreate(value, UriKind.Absolute, out var uri) &&
+               (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
     }
 }
 

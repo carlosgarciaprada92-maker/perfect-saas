@@ -21,11 +21,22 @@ public class PlatformService : IPlatformService
 
     public async Task<IReadOnlyCollection<ModuleCatalogResponse>> GetModulesAsync(CancellationToken ct)
     {
-        return await _db.ModuleCatalogs
+        var modules = await _db.ModuleCatalogs
             .AsNoTracking()
             .OrderBy(x => x.Name)
-            .Select(x => new ModuleCatalogResponse(x.Id, x.Name, x.Slug, x.BaseUrl, x.Icon, x.Status.ToString(), x.CreatedAt))
             .ToListAsync(ct);
+
+        return modules
+            .Select(x => new ModuleCatalogResponse(
+                x.Id,
+                x.Name,
+                x.Slug,
+                x.BaseUrl,
+                ResolveLaunchUrl(x),
+                x.Icon,
+                x.Status.ToString(),
+                x.CreatedAt))
+            .ToList();
     }
 
     public async Task<ModuleCatalogResponse> CreateModuleAsync(ModuleCatalogRequest request, CancellationToken ct)
@@ -38,11 +49,14 @@ public class PlatformService : IPlatformService
         }
 
         var status = ParseModuleStatus(request.Status);
+        var baseUrl = NormalizeUrl(request.BaseUrl) ?? NormalizeUrl(request.LaunchUrl) ?? string.Empty;
+        var launchUrl = NormalizeUrl(request.LaunchUrl) ?? baseUrl;
         var entity = new ModuleCatalog
         {
             Name = request.Name,
             Slug = slug,
-            BaseUrl = request.BaseUrl,
+            BaseUrl = baseUrl,
+            LaunchUrl = launchUrl,
             Icon = request.Icon,
             Status = status,
             CreatedAt = _clock.UtcNow
@@ -51,7 +65,15 @@ public class PlatformService : IPlatformService
         _db.ModuleCatalogs.Add(entity);
         await _db.SaveChangesAsync(ct);
 
-        return new ModuleCatalogResponse(entity.Id, entity.Name, entity.Slug, entity.BaseUrl, entity.Icon, entity.Status.ToString(), entity.CreatedAt);
+        return new ModuleCatalogResponse(
+            entity.Id,
+            entity.Name,
+            entity.Slug,
+            entity.BaseUrl,
+            ResolveLaunchUrl(entity),
+            entity.Icon,
+            entity.Status.ToString(),
+            entity.CreatedAt);
     }
 
     public async Task<ModuleCatalogResponse> UpdateModuleAsync(Guid id, ModuleCatalogRequest request, CancellationToken ct)
@@ -70,15 +92,26 @@ public class PlatformService : IPlatformService
         }
 
         var status = ParseModuleStatus(request.Status);
+        var baseUrl = NormalizeUrl(request.BaseUrl) ?? NormalizeUrl(request.LaunchUrl) ?? string.Empty;
+        var launchUrl = NormalizeUrl(request.LaunchUrl) ?? baseUrl;
         entity.Name = request.Name;
         entity.Slug = slug;
-        entity.BaseUrl = request.BaseUrl;
+        entity.BaseUrl = baseUrl;
+        entity.LaunchUrl = launchUrl;
         entity.Icon = request.Icon;
         entity.Status = status;
 
         await _db.SaveChangesAsync(ct);
 
-        return new ModuleCatalogResponse(entity.Id, entity.Name, entity.Slug, entity.BaseUrl, entity.Icon, entity.Status.ToString(), entity.CreatedAt);
+        return new ModuleCatalogResponse(
+            entity.Id,
+            entity.Name,
+            entity.Slug,
+            entity.BaseUrl,
+            ResolveLaunchUrl(entity),
+            entity.Icon,
+            entity.Status.ToString(),
+            entity.CreatedAt);
     }
 
     public async Task<bool> DeleteModuleAsync(Guid id, CancellationToken ct)
@@ -134,6 +167,7 @@ public class PlatformService : IPlatformService
                     module.Name,
                     module.Slug,
                     module.BaseUrl,
+                    ResolveLaunchUrl(module),
                     module.Status.ToString(),
                     assignment?.Enabled ?? false,
                     assignment?.ActivatedAt,
@@ -185,6 +219,26 @@ public class PlatformService : IPlatformService
             throw new AppException(ErrorCodes.Validation, "Invalid module status", 400);
         }
         return parsed;
+    }
+
+    private static string ResolveLaunchUrl(ModuleCatalog module)
+    {
+        if (!string.IsNullOrWhiteSpace(module.LaunchUrl))
+        {
+            return module.LaunchUrl.Trim();
+        }
+
+        return module.BaseUrl?.Trim() ?? string.Empty;
+    }
+
+    private static string? NormalizeUrl(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        return value.Trim().TrimEnd('/');
     }
 
     private static TenantStatus ParseTenantStatus(string status)

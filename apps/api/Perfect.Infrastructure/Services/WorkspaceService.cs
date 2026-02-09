@@ -37,6 +37,7 @@ public class WorkspaceService : IWorkspaceService
                 x.Module.Name,
                 x.Module.Slug,
                 x.Module.BaseUrl,
+                ResolveLaunchUrl(x.Module),
                 x.Module.Status.ToString(),
                 x.Enabled))
             .ToList();
@@ -45,5 +46,15 @@ public class WorkspaceService : IWorkspaceService
     public Task<IReadOnlyCollection<WorkspaceUserResponse>> GetUsersAsync(CancellationToken ct)
     {
         return Task.FromResult<IReadOnlyCollection<WorkspaceUserResponse>>(Array.Empty<WorkspaceUserResponse>());
+    }
+
+    private static string ResolveLaunchUrl(ModuleCatalog module)
+    {
+        if (!string.IsNullOrWhiteSpace(module.LaunchUrl))
+        {
+            return module.LaunchUrl.Trim();
+        }
+
+        return module.BaseUrl?.Trim() ?? string.Empty;
     }
 }

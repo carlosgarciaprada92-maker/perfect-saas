@@ -59,6 +59,7 @@ public static class DbInitializer
                 Name = "Peluquerías",
                 Slug = "peluquerias",
                 BaseUrl = BuildModuleUrl(defaultBaseUrl, "peluquerias"),
+                LaunchUrl = BuildModuleUrl(defaultBaseUrl, "peluquerias"),
                 Status = Perfect.Domain.Enums.ModuleStatus.Active
             },
             new ModuleCatalog
@@ -66,6 +67,7 @@ public static class DbInitializer
                 Name = "Inventarios",
                 Slug = "inventarios",
                 BaseUrl = BuildModuleUrl(defaultBaseUrl, "inventarios"),
+                LaunchUrl = BuildModuleUrl(defaultBaseUrl, "inventarios"),
                 Status = Perfect.Domain.Enums.ModuleStatus.Active
             }
         };
@@ -81,6 +83,7 @@ public static class DbInitializer
 
             var currentUrl = existing.BaseUrl?.Trim() ?? string.Empty;
             var desiredUrl = BuildModuleUrl(defaultBaseUrl, module.Slug);
+            var currentLaunch = existing.LaunchUrl?.Trim() ?? string.Empty;
             var hasLegacyUrl = string.Equals(currentUrl, legacyBaseUrl, StringComparison.OrdinalIgnoreCase);
             var isBaseOnly = string.Equals(NormalizeBaseUrl(currentUrl), NormalizeBaseUrl(defaultBaseUrl), StringComparison.OrdinalIgnoreCase);
             var shouldOverwrite = string.IsNullOrWhiteSpace(currentUrl) || hasLegacyUrl || isBaseOnly;
@@ -88,10 +91,24 @@ public static class DbInitializer
             if (shouldOverwrite && !string.IsNullOrWhiteSpace(desiredUrl))
             {
                 existing.BaseUrl = desiredUrl;
+                existing.LaunchUrl = desiredUrl;
             }
             else if (hasLegacyUrl && string.IsNullOrWhiteSpace(defaultBaseUrl))
             {
                 existing.BaseUrl = string.Empty;
+                existing.LaunchUrl = string.Empty;
+            }
+
+            if (string.IsNullOrWhiteSpace(existing.LaunchUrl))
+            {
+                if (!string.IsNullOrWhiteSpace(existing.BaseUrl))
+                {
+                    existing.LaunchUrl = NormalizeLaunchUrl(existing.BaseUrl, module.Slug);
+                }
+                else if (!string.IsNullOrWhiteSpace(desiredUrl))
+                {
+                    existing.LaunchUrl = desiredUrl;
+                }
             }
 
             if (!string.Equals(existing.Name, module.Name, StringComparison.Ordinal))
@@ -123,6 +140,26 @@ public static class DbInitializer
 
         var normalized = baseUrl.Trim().TrimEnd('/');
         return $"{normalized}/{slug}";
+    }
+
+    private static string NormalizeLaunchUrl(string baseUrl, string slug)
+    {
+        if (string.IsNullOrWhiteSpace(baseUrl))
+        {
+            return string.Empty;
+        }
+
+        var trimmed = baseUrl.Trim().TrimEnd('/');
+        if (Uri.TryCreate(trimmed, UriKind.Absolute, out var uri))
+        {
+            var path = uri.AbsolutePath.TrimEnd('/');
+            if (path.EndsWith($"/{slug}", StringComparison.OrdinalIgnoreCase))
+            {
+                return trimmed;
+            }
+        }
+
+        return $"{trimmed}/{slug}";
     }
 
     private static string NormalizeBaseUrl(string value)
