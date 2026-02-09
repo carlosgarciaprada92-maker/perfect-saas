@@ -70,7 +70,10 @@
                                                                                                                                        "maximumError":  "8kB"
                                                                                                                                    }
                                                                                                                                ],
-                                                                                                                   "index":  "src/index.inventarios.html",
+                                                                                                                   "index":  {
+                                                                                                                                "input":  "src/index.inventarios.html",
+                                                                                                                                "output":  "index.html"
+                                                                                                                            },
                                                                                                                    "outputHashing":  "all",
                                                                                                                    "serviceWorker":  "ngsw-config.json",
                                                                                                                    "fileReplacements":  [
@@ -93,7 +96,10 @@
                                                                                                                                       "maximumError":  "8kB"
                                                                                                                                   }
                                                                                                                               ],
-                                                                                                                  "index":  "src/index.peluquerias.html",
+                                                                                                                  "index":  {
+                                                                                                                               "input":  "src/index.peluquerias.html",
+                                                                                                                               "output":  "index.html"
+                                                                                                                           },
                                                                                                                   "outputHashing":  "all",
                                                                                                                   "serviceWorker":  "ngsw-config.json",
                                                                                                                   "fileReplacements":  [
