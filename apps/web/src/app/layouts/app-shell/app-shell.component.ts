@@ -13,7 +13,7 @@ import { PermissionKey } from '../../core/models/app-module.model';
 import { RolUsuario } from '../../core/models/usuario.model';
 import { filter } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 interface NavItem {
   labelKey: string;
