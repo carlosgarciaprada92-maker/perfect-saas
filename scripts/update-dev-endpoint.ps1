@@ -29,6 +29,8 @@ $tfvars = Get-Content -Path $tfvarsPath -Raw
 $updated = $tfvars -replace 'app_public_ip\s*=\s*\"[^\"]+\"', "app_public_ip        = `"$ip`""
 Set-Content -Path $tfvarsPath -Value $updated
 
-terraform -chdir=$TfDir apply -auto-approve
+Push-Location $TfDir
+terraform apply -auto-approve
+Pop-Location
 
 Write-Host "Updated app_public_ip to $ip and applied Terraform."
