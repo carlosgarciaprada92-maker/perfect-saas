@@ -21,3 +21,7 @@ output "ecs_service_name" {
 output "web_port" {
   value = module.ecs.web_port
 }
+
+output "api_gateway_url" {
+  value = aws_apigatewayv2_api.app.api_endpoint
+}

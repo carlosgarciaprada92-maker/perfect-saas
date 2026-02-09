@@ -27,3 +27,7 @@ variable "cors_allowed_origins" {
   type    = string
   default = "*"
 }
+
+variable "app_public_ip" {
+  type = string
+}

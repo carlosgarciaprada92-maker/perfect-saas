@@ -34,6 +34,43 @@ module "ecr_core" {
   tags            = local.common_tags
 }
 
+resource "aws_apigatewayv2_api" "app" {
+  name          = "${var.name_prefix}-http"
+  protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_credentials = false
+    allow_headers     = ["*"]
+    allow_methods     = ["*"]
+    allow_origins     = ["*"]
+    expose_headers    = ["*"]
+    max_age           = 3600
+  }
+
+  tags = local.common_tags
+}
+
+resource "aws_apigatewayv2_integration" "app" {
+  api_id                 = aws_apigatewayv2_api.app.id
+  integration_type       = "HTTP_PROXY"
+  integration_method     = "ANY"
+  payload_format_version = "1.0"
+  integration_uri        = "http://${var.app_public_ip}"
+}
+
+resource "aws_apigatewayv2_route" "app_default" {
+  api_id    = aws_apigatewayv2_api.app.id
+  route_key = "$default"
+  target    = "integrations/${aws_apigatewayv2_integration.app.id}"
+}
+
+resource "aws_apigatewayv2_stage" "app" {
+  api_id      = aws_apigatewayv2_api.app.id
+  name        = "$default"
+  auto_deploy = true
+  tags        = local.common_tags
+}
+
 module "ecs" {
   source             = "../../modules/ecs"
   name_prefix        = var.name_prefix
@@ -62,7 +99,7 @@ module "ecs" {
     Platform__BootstrapKey     = ""
     Platform__AllowDemoSeed    = "true"
     Swagger__Enabled           = "true"
-    CORE_DEFAULT_MODULE_BASEURL = "http://18.219.27.95"
+    CORE_DEFAULT_MODULE_BASEURL = aws_apigatewayv2_api.app.api_endpoint
   }
   tags = local.common_tags
 }

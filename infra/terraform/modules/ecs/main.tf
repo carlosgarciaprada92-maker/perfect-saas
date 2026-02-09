@@ -188,6 +188,15 @@ resource "aws_ecs_service" "app" {
   wait_for_steady_state  = true
   enable_execute_command = true
 
+  dynamic "load_balancer" {
+    for_each = var.lb_target_group_arn != "" ? [1] : []
+    content {
+      target_group_arn = var.lb_target_group_arn
+      container_name   = var.lb_container_name
+      container_port   = var.lb_container_port
+    }
+  }
+
   network_configuration {
     subnets          = var.subnet_ids
     security_groups  = var.security_group_ids

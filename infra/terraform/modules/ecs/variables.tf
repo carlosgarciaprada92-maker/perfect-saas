@@ -66,6 +66,21 @@ variable "assign_public_ip" {
   default = true
 }
 
+variable "lb_target_group_arn" {
+  type    = string
+  default = ""
+}
+
+variable "lb_container_name" {
+  type    = string
+  default = "web"
+}
+
+variable "lb_container_port" {
+  type    = number
+  default = 80
+}
+
 variable "db_name" {
   type    = string
   default = "perfectdb"
